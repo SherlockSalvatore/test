@@ -1,0 +1,31 @@
+<view class="page">
+  <view wx:if="{{orderList.length === 0}}" class="empty-orders">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">暂无订单</view>
+  </view>
+
+  <view wx:else class="order-list">
+    <view
+      wx:for="{{orderList}}"
+      wx:key="_id"
+      class="order-item card"
+      bindtap="goToDetail"
+      data-id="{{item._id}}"
+    >
+      <view class="order-header">
+        <view class="order-id">订单号：{{item._id.slice(-8)}}</view>
+        <view class="order-status {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</view>
+      </view>
+      <view class="order-items">
+        <view wx:for="{{item.items}}" wx:key="menuId" wx:for-item="subItem" class="item-summary">
+          <text>{{subItem.name}}</text>
+          <text>x{{subItem.quantity}}</text>
+        </view>
+      </view>
+      <view class="order-footer">
+        <view class="order-time">{{formatTime(item.createTime)}}</view>
+        <view class="order-amount">¥{{item.totalAmount}}</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,56 @@
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ff6b35, #ff8c42);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.logo {
+  font-size: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  color: #fff;
+  font-size: 36rpx;
+  margin-bottom: 80rpx;
+}
+
+.role-btn {
+  width: 80%;
+  height: 120rpx;
+  border-radius: 16rpx;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.role-btn::after {
+  border: none;
+}
+
+.btn-icon {
+  font-size: 48rpx;
+  margin-bottom: 10rpx;
+}
+
+.btn-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.user-btn:active {
+  transform: scale(0.98);
+}
+
+.admin-btn:active {
+  transform: scale(0.98);
+}

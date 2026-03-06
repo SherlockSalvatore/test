@@ -1,0 +1,9 @@
+{
+  "name": "menu-update",
+  "version": "1.0.0",
+  "description": "Menu update cloud function",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

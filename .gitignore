@@ -1,0 +1,19 @@
+# 微信小程序编译产物
+miniprogram/miniprogram_npm/
+
+# Node modules
+node_modules/
+
+# 微信开发者工具配置（包含敏感信息，可以忽略）
+project.private.config.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+
+# 临时文件
+*.tmp
+*.temp

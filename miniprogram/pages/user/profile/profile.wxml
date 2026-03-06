@@ -1,0 +1,56 @@
+<view class="page">
+  <!-- 用户信息 -->
+  <view class="user-section card">
+    <image class="avatar" src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill"></image>
+    <view class="user-info">
+      <view class="user-name">{{userInfo.nickName || '未登录'}}</view>
+      <view class="user-phone">{{userInfo.phone || '未绑定手机'}}</view>
+    </view>
+  </view>
+
+  <!-- 订单入口 -->
+  <view class="menu-section card mt-20">
+    <view class="section-title">我的订单</view>
+    <view class="order-menus">
+      <view class="order-menu-item" bindtap="goToOrders" data-status="all">
+        <view class="menu-icon">📋</view>
+        <view class="menu-text">全部订单</view>
+      </view>
+      <view class="order-menu-item" bindtap="goToOrders" data-status="pending">
+        <view class="menu-icon">⏰</view>
+        <view class="menu-text">待支付</view>
+      </view>
+      <view class="order-menu-item" bindtap="goToOrders" data-status="delivering">
+        <view class="menu-icon">🛵</view>
+        <view class="menu-text">配送中</view>
+      </view>
+      <view class="order-menu-item" bindtap="goToOrders" data-status="completed">
+        <view class="menu-icon">✅</view>
+        <view class="menu-text">已完成</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他功能 -->
+  <view class="other-section card mt-20">
+    <view class="menu-item" bindtap="showAdminEntry">
+      <view class="item-left">
+        <view class="item-icon">👨‍🍳</view>
+        <text>管理员入口</text>
+      </view>
+      <view class="item-arrow">›</view>
+    </view>
+    <view class="menu-item" bindtap="showAbout">
+      <view class="item-left">
+        <view class="item-icon">ℹ️</view>
+        <text>关于我们</text>
+      </view>
+      <view class="item-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section mt-20">
+    <button class="logout-btn" bindtap="logout">退出登录</button>
+  </view>
+</view>

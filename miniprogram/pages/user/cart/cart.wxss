@@ -1,0 +1,159 @@
+.empty-cart {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.empty-icon {
+  font-size: 150rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+  margin-bottom: 50rpx;
+}
+
+.go-order-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  width: 300rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+}
+
+.cart-list {
+  padding: 20rpx;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.item-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  background-color: #eee;
+  margin-right: 20rpx;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.item-price {
+  font-size: 32rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.item-control {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  width: 50rpx;
+  height: 50rpx;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}
+
+.btn.minus {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.quantity {
+  width: 50rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.delivery-section {
+  margin: 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+}
+
+.input-field {
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+}
+
+.textarea-field {
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  height: 150rpx;
+  font-size: 28rpx;
+}
+
+.checkout-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background-color: #fff;
+  border-top: 1rpx solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40rpx;
+  box-sizing: border-box;
+}
+
+.total-info {
+  display: flex;
+  align-items: center;
+}
+
+.total-label {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.total-price {
+  font-size: 40rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.checkout-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+  width: 200rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+}

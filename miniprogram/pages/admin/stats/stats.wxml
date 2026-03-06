@@ -1,0 +1,73 @@
+<view class="page">
+  <!-- 今日数据 -->
+  <view class="stats-section card">
+    <view class="section-title">今日数据</view>
+    <view class="stats-grid">
+      <view class="stats-item">
+        <view class="stats-value">{{todayStats.orderCount || 0}}</view>
+        <view class="stats-label">订单数</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-value">¥{{todayStats.totalAmount || 0}}</view>
+        <view class="stats-label">营业额</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-value">{{todayStats.pending || 0}}</view>
+        <view class="stats-label">待处理</view>
+      </view>
+      <view class="stats-item">
+        <view class="stats-value">{{todayStats.completed || 0}}</view>
+        <view class="stats-label">已完成</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 热销菜品 -->
+  <view class="stats-section card mt-20">
+    <view class="section-title">热销菜品 TOP5</view>
+    <view wx:if="{{topItems.length === 0}}" class="empty-data">暂无数据</view>
+    <view wx:else class="top-list">
+      <view
+        wx:for="{{topItems}}"
+        wx:key="name"
+        class="top-item"
+      >
+        <view class="top-rank">{{index + 1}}</view>
+        <view class="top-name">{{item.name}}</view>
+        <view class="top-count">{{item.count}}份</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单状态分布 -->
+  <view class="stats-section card mt-20">
+    <view class="section-title">订单状态</view>
+    <view class="status-list">
+      <view class="status-item">
+        <view class="status-dot paid"></view>
+        <text class="status-name">已支付</text>
+        <text class="status-count">{{statusCount.paid || 0}}</text>
+      </view>
+      <view class="status-item">
+        <view class="status-dot cooking"></view>
+        <text class="status-name">制作中</text>
+        <text class="status-count">{{statusCount.cooking || 0}}</text>
+      </view>
+      <view class="status-item">
+        <view class="status-dot delivering"></view>
+        <text class="status-name">配送中</text>
+        <text class="status-count">{{statusCount.delivering || 0}}</text>
+      </view>
+      <view class="status-item">
+        <view class="status-dot completed"></view>
+        <text class="status-name">已完成</text>
+        <text class="status-count">{{statusCount.completed || 0}}</text>
+      </view>
+      <view class="status-item">
+        <view class="status-dot cancelled"></view>
+        <text class="status-name">已取消</text>
+        <text class="status-count">{{statusCount.cancelled || 0}}</text>
+      </view>
+    </view>
+  </view>
+</view>

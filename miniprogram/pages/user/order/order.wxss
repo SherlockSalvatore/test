@@ -1,0 +1,148 @@
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.status-section {
+  text-align: center;
+  padding: 40rpx 20rpx;
+}
+
+.status-icon {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.status-text {
+  font-size: 40rpx;
+  font-weight: 500;
+  margin-bottom: 10rpx;
+}
+
+.status-text.paid,
+.status-text.cooking {
+  color: var(--primary-color);
+}
+
+.status-text.delivering {
+  color: var(--success-color);
+}
+
+.status-text.completed {
+  color: var(--text-secondary);
+}
+
+.status-text.cancelled {
+  color: var(--error-color);
+}
+
+.status-tip {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.address-section,
+.items-section,
+.info-section {
+  margin: 0 20rpx 20rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.address-item,
+.info-item {
+  display: flex;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+  line-height: 1.6;
+}
+
+.label {
+  color: #999;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.item-qty {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.item-price {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.delivery-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 15rpx 0;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  font-size: 30rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.total-price {
+  font-size: 36rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.action-section {
+  margin: 0 20rpx 40rpx;
+  display: flex;
+  gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+
+.cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.pay-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+}

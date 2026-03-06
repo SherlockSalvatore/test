@@ -1,0 +1,72 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <view wx:else>
+    <!-- 订单状态 -->
+    <view class="status-section card">
+      <view class="status-icon">{{getStatusIcon(order.status)}}</view>
+      <view class="status-text {{getStatusClass(order.status)}}">{{getStatusText(order.status)}}</view>
+      <view wx:if="{{order.status === 'delivering'}}" class="status-tip">配送员正在快马加鞭赶往您那里~</view>
+    </view>
+
+    <!-- 配送信息 -->
+    <view class="address-section card mt-20">
+      <view class="section-title">配送信息</view>
+      <view class="address-item">
+        <text class="label">收货人：</text>
+        <text>{{order.userName}}</text>
+      </view>
+      <view class="address-item">
+        <text class="label">电话：</text>
+        <text>{{order.phone}}</text>
+      </view>
+      <view class="address-item">
+        <text class="label">地址：</text>
+        <text>{{order.address}}</text>
+      </view>
+    </view>
+
+    <!-- 订单内容 -->
+    <view class="items-section card mt-20">
+      <view class="section-title">订单内容</view>
+      <view wx:for="{{order.items}}" wx:key="menuId" class="item-row">
+        <view class="item-name">{{item.name}}</view>
+        <view class="item-info">
+          <text class="item-qty">x{{item.quantity}}</text>
+          <text class="item-price">¥{{item.price * item.quantity}}</text>
+        </view>
+      </view>
+      <view class="delivery-row">
+        <text>配送费</text>
+        <text>¥{{order.deliveryFee}}</text>
+      </view>
+      <view class="total-row">
+        <text>合计</text>
+        <text class="total-price">¥{{order.totalAmount}}</text>
+      </view>
+    </view>
+
+    <!-- 订单信息 -->
+    <view class="info-section card mt-20">
+      <view class="section-title">订单信息</view>
+      <view class="info-item">
+        <text class="label">订单号：</text>
+        <text>{{order._id}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">下单时间：</text>
+        <text>{{formatTime(order.createTime)}}</text>
+      </view>
+      <view wx:if="{{order.paymentId}}" class="info-item">
+        <text class="label">支付状态：</text>
+        <text>{{order.paymentStatus === 'paid' ? '已支付' : '未支付'}}</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view wx:if="{{order.status === 'pending'}}" class="action-section mt-20">
+      <button class="action-btn cancel-btn" bindtap="cancelOrder">取消订单</button>
+      <button class="action-btn pay-btn" bindtap="payOrder">去支付</button>
+    </view>
+  </view>
+</view>

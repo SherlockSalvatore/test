@@ -1,0 +1,136 @@
+<view class="page">
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <view
+      wx:for="{{filterTabs}}"
+      wx:key="value"
+      class="filter-tab {{currentFilter === item.value ? 'active' : ''}}"
+      bindtap="switchFilter"
+      data-filter="{{item.value}}"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view wx:if="{{orderList.length === 0}}" class="empty-orders">
+    <view class="empty-icon">📋</view>
+    <view class="empty-text">暂无订单</view>
+  </view>
+
+  <view wx:else class="order-list">
+    <view
+      wx:for="{{orderList}}"
+      wx:key="_id"
+      class="order-item card"
+      bindtap="showOrderDetail"
+      data-order="{{item}}"
+    >
+      <view class="order-header">
+        <view class="order-id">{{item._id.slice(-8)}}</view>
+        <view class="order-time">{{formatTime(item.createTime)}}</view>
+      </view>
+      <view class="order-content">
+        <view class="user-info">
+          <text>{{item.userName}}</text>
+          <text>{{item.phone}}</text>
+        </view>
+        <view class="items-summary">
+          <text wx:for="{{item.items}}" wx:key="menuId">{{item.name}}x{{item.quantity}}</text>
+        </view>
+        <view class="order-status {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</view>
+      </view>
+      <view class="order-footer">
+        <view class="address">{{item.address}}</view>
+        <view class="amount">¥{{item.totalAmount}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 订单详情弹窗 -->
+<view wx:if="{{showDetail}}" class="modal-mask" bindtap="hideDetail">
+  <view class="detail-modal" catchtap="">
+    <view class="detail-header">
+      <view class="detail-title">订单详情</view>
+      <view class="close-btn" bindtap="hideDetail">✕</view>
+    </view>
+
+    <scroll-view scroll-y class="detail-content">
+      <view class="detail-section">
+        <view class="detail-label">订单号</view>
+        <view class="detail-value">{{currentOrder._id}}</view>
+      </view>
+
+      <view class="detail-section">
+        <view class="detail-label">客户信息</view>
+        <view class="detail-value">{{currentOrder.userName}} {{currentOrder.phone}}</view>
+      </view>
+
+      <view class="detail-section">
+        <view class="detail-label">收货地址</view>
+        <view class="detail-value">{{currentOrder.address}}</view>
+      </view>
+
+      <view class="detail-section">
+        <view class="detail-label">订单内容</view>
+        <view wx:for="{{currentOrder.items}}" wx:key="menuId" class="detail-item">
+          <text>{{item.name}}</text>
+          <text>x{{item.quantity}} ¥{{item.price * item.quantity}}</text>
+        </view>
+      </view>
+
+      <view class="detail-section">
+        <view class="detail-label">配送费</view>
+        <view class="detail-value">¥{{currentOrder.deliveryFee}}</view>
+      </view>
+
+      <view class="detail-section total-section">
+        <view class="detail-label">订单总额</view>
+        <view class="detail-value total-price">¥{{currentOrder.totalAmount}}</view>
+      </view>
+
+      <view class="detail-section">
+        <view class="detail-label">订单状态</view>
+        <view class="detail-value status-tag {{getStatusClass(currentOrder.status)}}">
+          {{getStatusText(currentOrder.status)}}
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 操作按钮 -->
+    <view class="detail-actions">
+      <button
+        wx:if="{{currentOrder.status === 'paid'}}"
+        class="action-btn start-btn"
+        bindtap="updateStatus"
+        data-status="cooking"
+      >
+        开始制作
+      </button>
+      <button
+        wx:if="{{currentOrder.status === 'cooking'}}"
+        class="action-btn deliver-btn"
+        bindtap="updateStatus"
+        data-status="delivering"
+      >
+        开始配送
+      </button>
+      <button
+        wx:if="{{currentOrder.status === 'delivering'}}"
+        class="action-btn complete-btn"
+        bindtap="updateStatus"
+        data-status="completed"
+      >
+        订单完成
+      </button>
+      <button
+        wx:if="{{currentOrder.status === 'paid' || currentOrder.status === 'cooking'}}"
+        class="action-btn cancel-btn"
+        bindtap="cancelOrder"
+      >
+        取消订单
+      </button>
+    </view>
+  </view>
+</view>

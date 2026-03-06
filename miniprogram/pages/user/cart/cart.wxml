@@ -1,0 +1,62 @@
+<view class="page">
+  <view wx:if="{{cartItems.length === 0}}" class="empty-cart">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">购物车是空的</view>
+    <button class="go-order-btn" bindtap="goToOrder">去点餐</button>
+  </view>
+
+  <view wx:else>
+    <!-- 购物车列表 -->
+    <view class="cart-list">
+      <view
+        wx:for="{{cartItems}}"
+        wx:key="menuId"
+        class="cart-item card"
+      >
+        <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="item-info">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-price">¥{{item.price}}</view>
+        </view>
+        <view class="item-control">
+          <view class="btn minus" bindtap="decrease" data-id="{{item.menuId}}">-</view>
+          <view class="quantity">{{item.quantity}}</view>
+          <view class="btn plus" bindtap="increase" data-id="{{item.menuId}}">+</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 配送信息 -->
+    <view class="delivery-section card mt-20">
+      <view class="section-title">配送信息</view>
+      <input
+        class="input-field"
+        placeholder="请输入收货人姓名"
+        value="{{address.name}}"
+        bindinput="onNameInput"
+      />
+      <input
+        class="input-field"
+        placeholder="请输入联系电话"
+        value="{{address.phone}}"
+        type="number"
+        bindinput="onPhoneInput"
+      />
+      <textarea
+        class="textarea-field"
+        placeholder="请输入详细地址"
+        value="{{address.detail}}"
+        bindinput="onAddressInput"
+      />
+    </view>
+
+    <!-- 结算栏 -->
+    <view class="checkout-bar">
+      <view class="total-info">
+        <view class="total-label">合计</view>
+        <view class="total-price">¥{{totalAmount}}</view>
+      </view>
+      <button class="checkout-btn" bindtap="submitOrder">提交订单</button>
+    </view>
+  </view>
+</view>

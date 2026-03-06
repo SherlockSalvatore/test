@@ -1,0 +1,291 @@
+.filter-tabs {
+  display: flex;
+  background-color: #fff;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.filter-tab {
+  padding: 12rpx 32rpx;
+  margin-right: 20rpx;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.filter-tab.active {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.empty-orders {
+  min-height: calc(100vh - 100rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.empty-icon {
+  font-size: 150rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+}
+
+.order-list {
+  padding: 20rpx;
+}
+
+.order-item {
+  margin-bottom: 20rpx;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.order-id {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.order-content {
+  padding: 20rpx 0;
+}
+
+.user-info {
+  font-size: 26rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.items-summary {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.order-status {
+  font-size: 26rpx;
+  font-weight: 500;
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.order-status.pending {
+  background-color: rgba(250, 173, 20, 0.1);
+  color: var(--warning-color);
+}
+
+.order-status.paid {
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+}
+
+.order-status.cooking {
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+}
+
+.order-status.delivering {
+  background-color: rgba(82, 196, 26, 0.1);
+  color: var(--success-color);
+}
+
+.order-status.completed {
+  background-color: rgba(153, 153, 153, 0.1);
+  color: #999;
+}
+
+.order-status.cancelled {
+  background-color: rgba(245, 34, 45, 0.1);
+  color: var(--error-color);
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.address {
+  font-size: 24rpx;
+  color: #999;
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.amount {
+  font-size: 32rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+/* 详情弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.detail-modal {
+  width: 650rpx;
+  max-height: 85vh;
+  background-color: #fff;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.detail-title {
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.close-btn {
+  width: 50rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  font-size: 40rpx;
+  color: #999;
+}
+
+.detail-content {
+  flex: 1;
+  padding: 30rpx;
+}
+
+.detail-section {
+  margin-bottom: 25rpx;
+}
+
+.detail-label {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 10rpx;
+}
+
+.detail-value {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.total-section {
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.total-price {
+  font-size: 36rpx;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+}
+
+.status-tag.paid {
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+}
+
+.status-tag.cooking {
+  background-color: rgba(255, 107, 53, 0.1);
+  color: var(--primary-color);
+}
+
+.status-tag.delivering {
+  background-color: rgba(82, 196, 26, 0.1);
+  color: var(--success-color);
+}
+
+.status-tag.completed {
+  background-color: rgba(153, 153, 153, 0.1);
+  color: #999;
+}
+
+.status-tag.cancelled {
+  background-color: rgba(245, 34, 45, 0.1);
+  color: var(--error-color);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 15rpx;
+  padding: 30rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.action-btn {
+  flex: 1;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+}
+
+.start-btn,
+.deliver-btn {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.complete-btn {
+  background-color: var(--success-color);
+  color: #fff;
+}
+
+.cancel-btn {
+  background-color: #fff1f0;
+  color: var(--error-color);
+}

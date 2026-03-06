@@ -1,0 +1,14 @@
+<view class="login-container">
+  <view class="logo">🍔 外卖小程序</view>
+  <view class="title">请选择登录身份</view>
+
+  <button class="role-btn user-btn" bindtap="loginAsUser">
+    <view class="btn-icon">👤</view>
+    <view class="btn-text">我是用户</view>
+  </button>
+
+  <button class="role-btn admin-btn" bindtap="loginAsAdmin">
+    <view class="btn-icon">👨‍🍳</view>
+    <view class="btn-text">我是管理员</view>
+  </button>
+</view>
