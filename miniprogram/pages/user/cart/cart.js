@@ -54,7 +54,7 @@ Page({
     const total = subtotal + DELIVERY_FEE
 
     this.setData({
-      cart: cartItems,
+      cartItems,
       totalAmount: total.toFixed(2)
     })
   },
