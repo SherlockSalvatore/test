@@ -149,7 +149,7 @@ Page({
     wx.showLoading({ title: '创建订单中...' })
 
     wx.cloud.callFunction({
-      name: 'order/create',
+      name: 'order-create',
       data: {
         items: cartItems,
         address,
@@ -172,7 +172,7 @@ Page({
 
   requestPayment(orderId) {
     wx.cloud.callFunction({
-      name: 'order/payment',
+      name: 'order-payment',
       data: { orderId }
     }).then(res => {
       const { timeStamp, nonceStr, pkg, signType, paySign } = res.result

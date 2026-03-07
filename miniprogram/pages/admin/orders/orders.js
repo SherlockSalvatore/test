@@ -79,7 +79,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.cloud.callFunction({
-            name: 'order/update',
+            name: 'order-update',
             data: {
               orderId,
               status
@@ -107,7 +107,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.cloud.callFunction({
-            name: 'order/update',
+            name: 'order-update',
             data: {
               orderId,
               status: 'cancelled'

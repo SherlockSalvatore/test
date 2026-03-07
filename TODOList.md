@@ -3,12 +3,13 @@
 ## P0 - 必须完成
 
 ### 1. 部署云函数
-- [ ] `cloudfunctions/order/create` - 创建订单
-- [ ] `cloudfunctions/order/update` - 更新订单状态
-- [ ] `cloudfunctions/order/payment` - 支付参数
-- [ ] `cloudfunctions/menu/update` - 菜单更新
-- [ ] `cloudfunctions/menu/delete` - 菜单删除
+- [ ] `cloudfunctions/order-create` - 创建订单
+- [ ] `cloudfunctions/order-update` - 更新订单状态
+- [ ] `cloudfunctions/order-payment` - 支付参数
+- [ ] `cloudfunctions/menu-update` - 菜单更新
+- [ ] `cloudfunctions/menu-delete` - 菜单删除
 - **操作方式**: 在微信开发者工具中右键点击云函数文件夹 →「上传并部署：云端安装依赖」
+- **注意**: 云函数必须是 cloudfunctions 下的一级文件夹，不能有嵌套结构
 
 ### 2. 创建数据库集合
 - [ ] `menu` - 菜单集合（权限：所有用户可读写）

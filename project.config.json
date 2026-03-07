@@ -1,6 +1,7 @@
 {
   "description": "个人餐点外卖小程序",
   "miniprogramRoot": "miniprogram/",
+  "cloud":true,
   "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "es6": true,

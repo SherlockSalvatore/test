@@ -90,7 +90,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.cloud.callFunction({
-            name: 'menu/delete',
+            name: 'menu-delete',
             data: { menuId: id }
           }).then(() => {
             wx.showToast({ title: '删除成功', icon: 'success' })
@@ -110,7 +110,7 @@ Page({
     const status = e.currentTarget.dataset.status
 
     wx.cloud.callFunction({
-      name: 'menu/update',
+      name: 'menu-update',
       data: {
         menuId: id,
         data: { available: !status }
@@ -205,7 +205,7 @@ Page({
     if (editingId) {
       // 更新
       wx.cloud.callFunction({
-        name: 'menu/update',
+        name: 'menu-update',
         data: {
           menuId: editingId,
           data
@@ -223,7 +223,7 @@ Page({
     } else {
       // 新增
       wx.cloud.callFunction({
-        name: 'menu/update',
+        name: 'menu-update',
         data: { data }
       }).then(() => {
         wx.hideLoading()

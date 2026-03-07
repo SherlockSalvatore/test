@@ -52,7 +52,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.cloud.callFunction({
-            name: 'order/update',
+            name: 'order-update',
             data: {
               orderId: this.data.order._id,
               status: 'cancelled'
@@ -74,7 +74,7 @@ Page({
   // 支付订单
   payOrder() {
     wx.cloud.callFunction({
-      name: 'order/payment',
+      name: 'order-payment',
       data: { orderId: this.data.order._id }
     }).then(res => {
       const { timeStamp, nonceStr, pkg, signType, paySign } = res.result
