@@ -67,6 +67,7 @@ exports.main = async (event, context) => {
                 success: true,
                 token: newToken,
                 role: defaultRole,
+                openid: openId,
                 isNewUser: true
             }
         } else {
@@ -82,6 +83,7 @@ exports.main = async (event, context) => {
                 success: true,
                 token: newToken,
                 role: userRecord.role || 'user',
+                openid: openId,
                 isNewUser: false
             }
         }

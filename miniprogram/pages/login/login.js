@@ -64,10 +64,10 @@ Page({
             },
             success: (cloudRes) => {
               wx.hideLoading();
-              const { token, role } = cloudRes.result;
+              const { token, role, openid } = cloudRes.result;
 
               if (token) {
-                this.saveUserInfo(role, token);
+                this.saveUserInfo(role, token, openid);
               } else {
                 wx.showToast({ title: '登录失败，请重试', icon: 'error' });
               }
@@ -93,14 +93,23 @@ Page({
   },
 
   // 保存用户信息并跳转
-  saveUserInfo(role, token) {
+  saveUserInfo(role, token, openid) {
     wx.setStorageSync('userRole', role);
     wx.setStorageSync('token', token);
+    if (openid) {
+      wx.setStorageSync('OPENID', openid);
+    }
 
     const app = getApp();
     if (app && app.globalData) {
       app.globalData.userRole = role;
       app.globalData.token = token;
+
+      // Ensure userInfo exists before patching openid
+      if (!app.globalData.userInfo) {
+        app.globalData.userInfo = {};
+      }
+      app.globalData.userInfo.openid = openid;
     }
 
     wx.showToast({
