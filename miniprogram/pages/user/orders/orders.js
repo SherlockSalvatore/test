@@ -14,7 +14,7 @@ Page({
   // // 加载订单列表
   loadOrders() {
     const db = wx.cloud.database()
-    const _ = db.command
+    const app = getApp()
     // Try to get openid from global user info or direct storage
     const openid = wx.getStorageSync('OPENID') || (app.globalData.userInfo && app.globalData.userInfo.openid) || ''
 
