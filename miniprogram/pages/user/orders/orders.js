@@ -15,11 +15,17 @@ Page({
   loadOrders() {
     const db = wx.cloud.database()
     const _ = db.command
-    const app = getApp()
-    const openid = app.globalData.userInfo?.openid || ''
+    // Try to get openid from global user info or direct storage
+    const openid = wx.getStorageSync('OPENID') || (app.globalData.userInfo && app.globalData.userInfo.openid) || ''
+
+    if (!openid) {
+      console.warn('Could not find openid, cannot load orders')
+      this.setData({ orderList: [] })
+      return
+    }
 
     db.collection('orders')
-      .where({ userId: openid })
+      .where({ _openid: openid })
       .orderBy('createTime', 'desc')
       .get()
       .then(res => {
