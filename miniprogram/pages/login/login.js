@@ -1,6 +1,7 @@
 Page({
   data: {
-    isAgreed: false // Track privacy policy agreement
+    isAgreed: false, // Track privacy policy agreement
+    showPopup: false // Track popup visibility
   },
 
   // 监听复选框变化
@@ -10,6 +11,24 @@ Page({
     });
   },
 
+  // 打开弹窗
+  openLoginPopup() {
+    this.setData({
+      showPopup: true
+    });
+  },
+
+  // 关闭弹窗
+  closeLoginPopup() {
+    this.setData({
+      showPopup: false,
+      isAgreed: false // normally reset agreement when closing
+    });
+  },
+
+  // 阻止冒泡
+  stopBubble() { },
+
   // 如果未勾选协议点击按钮，提示用户
   checkAgreement() {
     if (!this.data.isAgreed) {
@@ -18,14 +37,14 @@ Page({
         icon: 'none',
         duration: 2000
       });
+      return false;
     }
+    return true;
   },
 
-  // 用户点击微信一键登录
+  // 用户在弹窗内点击授权登录
   loginAsUser(e) {
-    if (!this.data.isAgreed) {
-      // 这里的 checkAgreement 虽然绑定了 tap，但以防万一还是在这里拦截一下
-      this.checkAgreement();
+    if (!this.checkAgreement()) {
       return;
     }
 
@@ -46,7 +65,7 @@ Page({
             success: (cloudRes) => {
               wx.hideLoading();
               const { token, role } = cloudRes.result;
-              
+
               if (token) {
                 this.saveUserInfo(role, token);
               } else {
@@ -103,12 +122,16 @@ Page({
     }, 1000);
   },
 
-  // 协议跳转桩函数
+  // 协议跳转
   goToAgreement() {
-    wx.showToast({ title: '正在开发中...', icon: 'none' });
+    wx.navigateTo({
+      url: '/pages/agreement/user-agreement'
+    });
   },
 
   goToPrivacy() {
-    wx.showToast({ title: '正在开发中...', icon: 'none' });
+    wx.navigateTo({
+      url: '/pages/agreement/privacy-policy'
+    });
   }
 });

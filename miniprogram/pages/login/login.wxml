@@ -6,25 +6,43 @@
     <view class="subtitle">健康美味，妈妈安心</view>
   </view>
 
-  <!-- Login Area -->
+  <!-- Main Call to Action -->
   <view class="login-box">
-    <!-- One-click Login -->
-    <button class="login-btn {{isAgreed ? '' : 'disabled'}}" bindtap="loginAsUser">
+    <button class="login-btn" bindtap="openLoginPopup">
       <view class="btn-content">
         <text class="btn-icon">微信一键登录</text>
       </view>
     </button>
-    
-    <!-- User Agreement -->
-    <view class="agreement-section">
-      <checkbox-group bindchange="onAgreementChange">
-        <label class="checkbox-label">
-          <checkbox class="mint-checkbox" value="agreed" checked="{{isAgreed}}" color="#4ade80" />
-          <view class="agreement-text">
-            我已阅读并同意 <text class="link" bindtap="goToAgreement">《用户服务协议》</text> 与 <text class="link" bindtap="goToPrivacy">《隐私政策》</text>
-          </view>
-        </label>
-      </checkbox-group>
+  </view>
+
+  <!-- Popup Overlay -->
+  <view class="popup-overlay" wx:if="{{showPopup}}" catchtap="closeLoginPopup">
+    <view class="popup-content" catchtap="stopBubble">
+      <view class="popup-header">
+        <text class="popup-title">微信授权登录</text>
+        <view class="popup-close" bindtap="closeLoginPopup">×</view>
+      </view>
+      
+      <view class="popup-body">
+        <image class="popup-avatar" src="/images/header.png" mode="aspectFill"></image>
+        <text class="popup-desc">璐璐私房菜申请获取您的微信授权，以便为您提供订单配送服务。</text>
+      </view>
+
+      <view class="agreement-section">
+        <checkbox-group bindchange="onAgreementChange">
+          <label class="checkbox-label">
+            <checkbox class="mint-checkbox" value="agreed" checked="{{isAgreed}}" color="#4ade80" />
+          </label>
+        </checkbox-group>
+        <view class="agreement-text">
+          我已阅读并同意 <text class="link" bindtap="goToAgreement">《用户服务协议》</text> 与 <text class="link" bindtap="goToPrivacy">《隐私政策》</text>
+        </view>
+      </view>
+
+      <view class="popup-footer">
+        <button class="popup-btn popup-btn-cancel" bindtap="closeLoginPopup">取消</button>
+        <button class="popup-btn popup-btn-confirm" bindtap="loginAsUser">同意授权</button>
+      </view>
     </view>
   </view>
 

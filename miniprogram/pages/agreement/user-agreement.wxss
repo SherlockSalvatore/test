@@ -1,0 +1,25 @@
+/* Shared agreement styling */
+.agreement-page {
+  padding: 40rpx;
+  background-color: #f0fdf4;
+  min-height: 100vh;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  text-align: center;
+  color: #166534;
+  margin-bottom: 40rpx;
+}
+
+.content {
+  background: white;
+  padding: 40rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.05);
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
