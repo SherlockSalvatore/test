@@ -10,7 +10,7 @@
       <input 
         type="nickname" 
         class="nickname-input" 
-        placeholder="点此输入宝宝昵称" 
+        placeholder="点此输入昵称" 
         placeholder-style="color: #a7f3d0;"
         value="{{userInfo.nickName}}" 
         bindblur="onNicknameInput" 
