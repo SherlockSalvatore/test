@@ -169,8 +169,10 @@ page {
   background: #f9fafb;
   border: 2rpx solid #e5e7eb;
   border-radius: 16rpx;
-  padding: 24rpx;
-  font-size: 28rpx;
+  padding: 0 24rpx;
+  height: 90rpx; /* Set explicit height instead of large padding to avoid squishing */
+  font-size: 30rpx; /* Slightly larger for clarity */
+  font-family: inherit; /* Ensure it inherits the modern page fonts */
   color: #374151;
   box-sizing: border-box;
   transition: all 0.3s;
@@ -188,7 +190,8 @@ page {
   border-radius: 16rpx;
   padding: 24rpx;
   height: 160rpx;
-  font-size: 28rpx;
+  font-size: 30rpx;
+  font-family: inherit;
   color: #374151;
   box-sizing: border-box;
 }
