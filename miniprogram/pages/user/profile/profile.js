@@ -1,6 +1,9 @@
 Page({
   data: {
-    userInfo: {}
+    userInfo: {
+      avatarUrl: '',
+      nickName: ''
+    }
   },
 
   onLoad() {
@@ -11,42 +14,62 @@ Page({
     this.loadUserInfo()
   },
 
-  // 加载用户信息
+  // Load User Info from globalData or Storage
   loadUserInfo() {
     const app = getApp()
+
+    // Check if we have manually saved avatar/nickname locally
+    const savedAvatar = wx.getStorageSync('userAvatar')
+    const savedNickname = wx.getStorageSync('userNickname')
+
+    // Merge global user state if any with our local visual preferences
     const userInfo = app.globalData.userInfo || {}
+    if (savedAvatar) userInfo.avatarUrl = savedAvatar
+    if (savedNickname) userInfo.nickName = savedNickname
+
     this.setData({ userInfo })
+  },
+
+  // Handle Avatar Selection (New WeChat API Support)
+  onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    this.setData({
+      'userInfo.avatarUrl': avatarUrl
+    })
+    // Save locally
+    wx.setStorageSync('userAvatar', avatarUrl)
+    if (getApp().globalData.userInfo) {
+      getApp().globalData.userInfo.avatarUrl = avatarUrl
+    }
+  },
+
+  // Handle Nickname Input
+  onNicknameInput(e) {
+    const nickName = e.detail.value
+    this.saveNickname(nickName)
+  },
+
+  onNicknameChange(e) {
+    const nickName = e.detail.value
+    this.saveNickname(nickName)
+  },
+
+  saveNickname(nickName) {
+    this.setData({
+      'userInfo.nickName': nickName
+    })
+    wx.setStorageSync('userNickname', nickName)
+    if (getApp().globalData.userInfo) {
+      getApp().globalData.userInfo.nickName = nickName
+    }
   },
 
   // 跳转到订单列表
   goToOrders(e) {
     const status = e.currentTarget.dataset.status
+    // Optional: Pass status parameter if your orders page supports it
     wx.switchTab({
       url: '/pages/user/orders/orders'
-    })
-  },
-
-  // 管理员入口
-  showAdminEntry() {
-    wx.showModal({
-      title: '管理员入口',
-      content: '请输入管理员密码',
-      editable: true,
-      placeholderText: '请输入密码',
-      success: (res) => {
-        if (res.confirm) {
-          if (res.content === 'admin123') {
-            wx.navigateTo({
-              url: '/pages/admin/orders/orders'
-            })
-          } else {
-            wx.showToast({
-              title: '密码错误',
-              icon: 'none'
-            })
-          }
-        }
-      }
     })
   },
 
@@ -54,7 +77,7 @@ Page({
   showAbout() {
     wx.showModal({
       title: '关于我们',
-      content: '璐璐私房菜 v1.0.0\n\n用心做好每一道菜',
+      content: '璐璐私房菜 v1.0.0\n\n用心做好每道菜',
       showCancel: false
     })
   },
@@ -63,17 +86,34 @@ Page({
   logout() {
     wx.showModal({
       title: '确认退出',
-      content: '确定要退出登录吗？',
+      content: '退出后需要重新授权登录哦，确定吗？',
+      confirmColor: '#4ade80',
       success: (res) => {
         if (res.confirm) {
+          // 完全清除所有本地状态
           wx.clearStorageSync()
+
           const app = getApp()
           app.globalData.userType = null
           app.globalData.userInfo = null
           app.globalData.cart = {}
 
+          // 立即重置当前页面数据，防止视觉残留
+          this.setData({
+            userInfo: {
+              avatarUrl: '',
+              nickName: ''
+            }
+          })
+
+          // 退回到登录授权页面
           wx.reLaunch({
- redirectUrl: '/pages/login/login'
+            url: '/pages/login/login'
+          })
+
+          wx.showToast({
+            title: '已安全退出',
+            icon: 'success'
           })
         }
       }

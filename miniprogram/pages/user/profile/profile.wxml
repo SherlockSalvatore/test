@@ -1,23 +1,38 @@
 <view class="page">
-  <!-- 用户信息 -->
-  <view class="user-section card">
-    <image class="avatar" src="{{userInfo.avatarUrl || '/images/avatar.png'}}" mode="aspectFill"></image>
+  <!-- 头像 & 昵称区域 (Avatar & Nickname Section) -->
+  <view class="user-header-card">
+    <button class="avatar-wrapper" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/header.png'}}" mode="aspectFill"></image>
+      <view class="edit-badge">✏️</view>
+    </button>
+    
     <view class="user-info">
-      <view class="user-name">{{userInfo.nickName || '未登录'}}</view>
-      <view class="user-phone">{{userInfo.phone || '未绑定手机'}}</view>
+      <input 
+        type="nickname" 
+        class="nickname-input" 
+        placeholder="点此输入宝宝昵称" 
+        placeholder-style="color: #a7f3d0;"
+        value="{{userInfo.nickName}}" 
+        bindblur="onNicknameInput" 
+        bindchange="onNicknameChange"
+      />
+      <view class="welcome-text">欢迎来到璐璐私房菜！</view>
     </view>
   </view>
 
-  <!-- 订单入口 -->
-  <view class="menu-section card mt-20">
-    <view class="section-title">我的订单</view>
+  <!-- 我的订单 (My Orders) -->
+  <view class="menu-section card">
+    <view class="section-title">
+      <text class="title-icon">🛍️</text>
+      <text>我的订单</text>
+    </view>
     <view class="order-menus">
       <view class="order-menu-item" bindtap="goToOrders" data-status="all">
         <view class="menu-icon">📋</view>
         <view class="menu-text">全部订单</view>
       </view>
       <view class="order-menu-item" bindtap="goToOrders" data-status="pending">
-        <view class="menu-icon">⏰</view>
+        <view class="menu-icon">🕐</view>
         <view class="menu-text">待支付</view>
       </view>
       <view class="order-menu-item" bindtap="goToOrders" data-status="delivering">
@@ -31,26 +46,19 @@
     </view>
   </view>
 
-  <!-- 其他功能 -->
-  <view class="other-section card mt-20">
-    <view class="menu-item" bindtap="showAdminEntry">
+  <!-- 其他功能 (Other Features) -->
+  <view class="other-section card">
+    <view class="menu-list-item" bindtap="showAbout">
       <view class="item-left">
-        <view class="item-icon">👨‍🍳</view>
-        <text>管理员入口</text>
+        <text class="item-icon">👨‍🍳</text>
+        <text class="item-text">关于璐璐私房菜</text>
       </view>
-      <view class="item-arrow">›</view>
-    </view>
-    <view class="menu-item" bindtap="showAbout">
-      <view class="item-left">
-        <view class="item-icon">ℹ️</view>
-        <text>关于我们</text>
-      </view>
-      <view class="item-arrow">›</view>
+      <text class="item-arrow">👉</text>
     </view>
   </view>
 
-  <!-- 退出登录 -->
-  <view class="logout-section mt-20">
+  <!-- 退出登录 (Logout) -->
+  <view class="logout-section">
     <button class="logout-btn" bindtap="logout">退出登录</button>
   </view>
 </view>

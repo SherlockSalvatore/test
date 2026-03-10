@@ -1,77 +1,132 @@
-.user-section {
-  margin: 20rpx;
+page {
+  background-color: #f0fdf4;
+  font-family: 'Comic Sans MS', 'STHupo', 'PingFang SC', sans-serif;
+}
+
+/* User Header Card */
+.user-header-card {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  margin: 30rpx 20rpx;
+  border-radius: 40rpx;
+  padding: 50rpx 40rpx;
   display: flex;
   align-items: center;
-  padding: 30rpx;
+  box-shadow: 0 10rpx 30rpx rgba(34, 197, 94, 0.2);
+  min-height: 200rpx;
+}
+
+.avatar-wrapper {
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 40rpx 0 0 !important;
+  width: 140rpx !important;
+  height: 140rpx !important;
+  min-width: 140rpx !important;
+  min-height: 140rpx !important;
+  max-width: 140rpx !important;
+  max-height: 140rpx !important;
+  border-radius: 50% !important;
+  position: relative;
+  border: 4rpx solid white;
+}
+
+.avatar-wrapper::after {
+  border: none;
 }
 
 .avatar {
-  width: 120rpx;
-  height: 120rpx;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  background-color: #eee;
-  margin-right: 30rpx;
+  background-color: #fff;
+}
+
+.edit-badge {
+  position: absolute;
+  bottom: -10rpx;
+  right: -10rpx;
+  background: white;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.1);
 }
 
 .user-info {
   flex: 1;
 }
 
-.user-name {
-  font-size: 36rpx;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 10rpx;
+.nickname-input {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: white;
+  background: transparent;
+  width: 100%;
+  margin-bottom: 12rpx;
 }
 
-.user-phone {
+.welcome-text {
   font-size: 26rpx;
-  color: #999;
+  color: #d1fae5;
 }
 
-.menu-section,
-.other-section {
-  margin: 0 20rpx 20rpx;
+/* Cards */
+.card {
+  background: white;
+  border-radius: 30rpx;
+  margin: 0 20rpx 30rpx;
+  padding: 40rpx;
+  box-shadow: 0 4rpx 20rpx rgba(34, 197, 94, 0.05);
 }
 
 .section-title {
-  font-size: 30rpx;
-  font-weight: 500;
-  margin-bottom: 20rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #166534;
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
 }
 
+.title-icon {
+  margin-right: 12rpx;
+  font-size: 38rpx;
+}
+
+/* Order Menus */
 .order-menus {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .order-menu-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx;
+  padding: 10rpx;
 }
 
 .menu-icon {
-  font-size: 48rpx;
-  margin-bottom: 10rpx;
+  font-size: 56rpx;
+  margin-bottom: 16rpx;
 }
 
 .menu-text {
-  font-size: 24rpx;
-  color: #666;
+  font-size: 26rpx;
+  color: #4b5563;
+  font-weight: bold;
 }
 
-.menu-item {
+/* Other Features */
+.menu-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30rpx 0;
-  border-bottom: 1rpx solid #eee;
-}
-
-.menu-item:last-child {
-  border-bottom: none;
+  padding: 20rpx 0;
 }
 
 .item-left {
@@ -84,23 +139,34 @@
   margin-right: 20rpx;
 }
 
-.item-arrow {
-  font-size: 48rpx;
-  color: #ccc;
+.item-text {
+  font-size: 30rpx;
+  color: #374151;
+  font-weight: bold;
 }
 
+.item-arrow {
+  color: #9ca3af;
+  font-size: 32rpx;
+}
+
+/* Logout Button */
 .logout-section {
-  margin: 0 20rpx 40rpx;
+  margin: 60rpx 40rpx;
 }
 
 .logout-btn {
-  width: 100%;
-  height: 80rpx;
-  line-height: 80rpx;
-  background-color: #fff;
-  color: var(--error-color);
-  border-radius: 12rpx;
-  font-size: 28rpx;
+  background: white;
+  color: #ef4444;
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 4rpx 15rpx rgba(239, 68, 68, 0.1);
+  border: 2rpx solid #fee2e2;
 }
 
 .logout-btn::after {
