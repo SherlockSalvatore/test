@@ -1,49 +1,43 @@
 const cloud = require('wx-server-sdk')
-cloud.init()
+
+cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
-const _ = db.command
 
 exports.main = async (event, context) => {
-  const { items, address, totalAmount, deliveryFee } = event
   const wxContext = cloud.getWXContext()
-  const { OPENID } = wxContext
+  const openid = wxContext.OPENID
 
-  // 获取用户信息
-  const userInfo = await db.collection('users').doc(OPENID).get()
-  const userName = userInfo.data?.nickName || '匿名用户'
-  const phone = userInfo.data?.phone || ''
+  // Extract order details from the client request
+  const { items, address, totalAmount, deliveryFee } = event
+
+  // Generate a unique order number based on timestamp and random string
+  const outTradeNo = 'ORD' + Date.now() + Math.floor(Math.random() * 1000).toString().padStart(3, '0')
 
   try {
-    // 创建订单
-    const orderData = {
-      userId: OPENID,
-      userName,
-      phone,
-      address: address.detail,
-      items,
-      totalAmount,
-      deliveryFee,
-      status: 'pending',
-      paymentStatus: 'unpaid',
-      createTime: db.serverDate(),
-      updateTime: db.serverDate()
-    }
-
-    const result = await db.collection('orders').add({
-      data: orderData
+    // Insert order into the database
+    const res = await db.collection('orders').add({
+      data: {
+        _openid: openid,     // The creator's WeChat OpenID
+        outTradeNo,          // Order identifier
+        items,               // Array of cart items {menuId, name, price, quantity, image}
+        address,             // Delivery address {name, phone, detail}
+        totalAmount,         // Total price including delivery
+        deliveryFee,         // Delivery fee
+        status: 'pending',   // Initial status: 'pending' (awaiting payment)
+        createTime: db.serverDate() // Server timestamp
+      }
     })
 
     return {
-      code: 0,
-      message: '订单创建成功',
-      orderId: result._id
+      success: true,
+      orderId: res._id,
+      outTradeNo
     }
   } catch (err) {
-    console.error(err)
+    console.error('Failed to create order', err)
     return {
-      code: -1,
-      message: '订单创建失败',
-      error: err.message
+      success: false,
+      error: err.message || err
     }
   }
 }

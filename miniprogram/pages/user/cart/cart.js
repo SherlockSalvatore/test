@@ -152,7 +152,26 @@ Page({
       name: 'order-payment',
       data: { orderId }
     }).then(res => {
-      const { timeStamp, nonceStr, pkg, signType, paySign } = res.result
+      // Handle the simulated payment response
+      if (res.result && res.result.mockPayment) {
+        wx.showToast({ title: '体验版模拟支付成功', icon: 'success' })
+        getApp().globalData.cart = {}
+
+        setTimeout(() => {
+          // orders is a tabbar page, so we must use switchTab
+          wx.switchTab({
+            url: '/pages/user/orders/orders'
+          })
+        }, 1500)
+        return
+      }
+
+      // Existing fallback for real payment payload
+      const { timeStamp, nonceStr, pkg, signType, paySign } = res.result || {}
+
+      if (!timeStamp) {
+        throw new Error('No mock response and no real pay params returned.')
+      }
 
       wx.requestPayment({
         timeStamp,
@@ -164,8 +183,8 @@ Page({
           wx.showToast({ title: '支付成功', icon: 'success' })
           getApp().globalData.cart = {}
           setTimeout(() => {
-            wx.redirectTo({
-              url: '/pages/user/order/order?id=' + orderId
+            wx.switchTab({
+              url: '/pages/user/orders/orders'
             })
           }, 1500)
         },
@@ -179,7 +198,7 @@ Page({
       })
     }).catch(err => {
       wx.showToast({
-        title: '获取支付参数失败',
+        title: '获取支付参数失败: ' + (err.message || '未知错误'),
         icon: 'none'
       })
       console.error(err)

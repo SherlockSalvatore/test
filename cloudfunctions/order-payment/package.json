@@ -1,8 +1,11 @@
 {
   "name": "order-payment",
   "version": "1.0.0",
-  "description": "Order payment cloud function",
+  "description": "Mock payment function",
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "wx-server-sdk": "~2.6.3"
   }
