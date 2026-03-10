@@ -1,21 +1,17 @@
 <view class="login-container">
   <!-- Cartoon Header Area -->
   <view class="header-area">
-    <image class="cartoon-clouds" src="/images/clouds.png" mode="widthFix" wx:if="{{false}}"></image> <!-- Placeholder for cloud image -->
-    <view class="logo-circle">
-      <view class="logo-emoji">👶🍲</view>
-    </view>
-    <view class="title">宝贝辅食外卖</view>
+    <image class="cartoon-clouds" src="/images/header.png" mode="aspectFill"></image>
+    <view class="title">璐璐私房菜</view>
     <view class="subtitle">健康美味，妈妈安心</view>
   </view>
 
   <!-- Login Area -->
   <view class="login-box">
     <!-- One-click Login -->
-    <button class="login-btn {{isAgreed ? '' : 'disabled'}}" bindgetphonenumber="loginAsUser" bindtap="checkAgreement">
+    <button class="login-btn {{isAgreed ? '' : 'disabled'}}" bindtap="loginAsUser">
       <view class="btn-content">
-        <text class="btn-icon">微信</text>
-        <text class="btn-text">一键登录</text>
+        <text class="btn-icon">微信一键登录</text>
       </view>
     </button>
     
