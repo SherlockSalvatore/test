@@ -1,6 +1,6 @@
 Page({
   data: {
-    categories: ['全部', '热菜', '凉菜', '主食', '饮品'],
+    categories: ['全部', '美食套餐', '手工面点', '鲜榨果蔬', '健康零食'],
     currentCategory: '全部',
     menuList: [],
     cart: {},
@@ -9,29 +9,39 @@ Page({
   },
 
   onLoad() {
+    this.setData({ cart: getApp().globalData.cart || {} })
     this.loadMenu()
   },
 
   onShow() {
-    this.loadMenu()
+    this.updateCartGlobal(getApp().globalData.cart || {})
   },
 
   loadMenu() {
+    wx.showLoading({ title: '加载中...' })
     const db = wx.cloud.database()
     const collection = db.collection('menu')
 
-    if (this.data.currentCategory === '全部') {
-      collection.where({ available: true }).get().then(res => {
-        this.setData({ menuList: res.data })
-      })
-    } else {
-      collection.where({
-        category: this.data.currentCategory,
-        available: true
-      }).get().then(res => {
-        this.setData({ menuList: res.data })
-      })
+    let query = { available: true }
+    if (this.data.currentCategory !== '全部') {
+      query.category = this.data.currentCategory
     }
+
+    collection.where(query).get().then(res => {
+      const cart = this.data.cart || {}
+      const menuList = res.data.map(item => {
+        return {
+          ...item,
+          quantity: cart[item._id] ? cart[item._id].quantity : 0
+        }
+      })
+      this.setData({ menuList })
+      wx.hideLoading()
+    }).catch(err => {
+      console.error('获取菜单失败', err)
+      wx.hideLoading()
+      wx.showToast({ title: '加载失败', icon: 'none' })
+    })
   },
 
   switchCategory(e) {
@@ -41,45 +51,56 @@ Page({
     })
   },
 
-  getQuantity(id) {
-    return this.data.cart[id] || 0
-  },
-
   increaseQuantity(e) {
     const id = e.currentTarget.dataset.id
+    const item = this.data.menuList.find(i => i._id === id)
+    if (!item) return;
+
     const cart = { ...this.data.cart }
-    cart[id] = (cart[id] || 0) + 1
-    this.updateCart(cart)
+    if (cart[id]) {
+      cart[id].quantity += 1
+    } else {
+      cart[id] = { ...item, quantity: 1 }
+    }
+    this.updateCartGlobal(cart)
   },
 
   decreaseQuantity(e) {
     const id = e.currentTarget.dataset.id
     const cart = { ...this.data.cart }
-    if (cart[id] > 0) {
-      cart[id]--
-      if (cart[id] === 0) {
+    if (cart[id] && cart[id].quantity > 0) {
+      cart[id].quantity -= 1
+      if (cart[id].quantity === 0) {
         delete cart[id]
       }
-      this.updateCart(cart)
+      this.updateCartGlobal(cart)
     }
   },
 
-  updateCart(cart) {
+  updateCartGlobal(cart) {
     let total = 0
     let amount = 0
 
-    this.data.menuList.forEach(item => {
-      const qty = cart[item._id] || 0
-      if (qty > 0) {
-        total += qty
-        amount += item.price * qty
+    Object.values(cart).forEach(cartItem => {
+      total += cartItem.quantity
+      amount += cartItem.price * cartItem.quantity
+    })
+
+    const updatedMenuList = this.data.menuList.map(item => {
+      return {
+        ...item,
+        quantity: cart[item._id] ? cart[item._id].quantity : 0
       }
     })
 
-    this.setData({ cart, cartTotal: total, cartAmount: amount.toFixed(2) })
+    this.setData({
+      cart,
+      cartTotal: total,
+      cartAmount: amount.toFixed(2),
+      menuList: updatedMenuList
+    })
 
-    const app = getApp()
-    app.globalData.cart = cart
+    getApp().globalData.cart = cart
   },
 
   goToCart() {

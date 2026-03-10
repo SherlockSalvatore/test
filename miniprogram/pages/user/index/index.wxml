@@ -1,53 +1,61 @@
 <view class="page">
-  <!-- 分类标签页 -->
-  <view class="category-tabs">
-    <view
-      wx:for="{{categories}}"
-      wx:key="index"
-      class="category-item {{currentCategory === item ? 'active' : ''}}"
-      bindtap="switchCategory"
-      data-category="{{item}}"
-    >
-      {{item}}
-    </view>
+  <!-- Top Banner Image -->
+  <view class="home-header">
+    <image class="header-image" src="/images/header.png" mode="aspectFill"></image>
   </view>
 
-  <!-- 菜品列表 -->
-  <scroll-view scroll-y class="menu-list">
-    <view
-      wx:for="{{menuList}}"
-      wx:key="_id"
-      class="menu-item card"
-    >
-      <image class="menu-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
-      <view class="menu-info">
-        <view class="menu-name">{{item.name}}</view>
-        <view class="menu-desc">{{item.description}}</view>
-        <view class="menu-bottom">
-          <view class="menu-price">¥{{item.price}}</view>
-          <view class="quantity-control">
-            <view
-              class="btn minus {{getQuantity(item._id) > 0 ? '' : 'disabled'}}"
-              bindtap="decreaseQuantity"
-              data-id="{{item._id}}"
-            >-</view>
-            <view class="quantity">{{getQuantity(item._id)}}</view>
-            <view
-              class="btn plus"
-              bindtap="increaseQuantity"
-              data-id="{{item._id}}"
-            >+</view>
+  <!-- Main Content Area -->
+  <view class="content-container">
+    
+    <!-- Category Sidebar (Left) -->
+    <scroll-view scroll-y class="category-sidebar">
+      <view
+        wx:for="{{categories}}"
+        wx:key="*this"
+        class="category-item {{currentCategory === item ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-category="{{item}}"
+      >
+        {{item}}
+      </view>
+    </scroll-view>
+
+    <!-- Menu List (Right) -->
+    <scroll-view scroll-y class="menu-list">
+      <view
+        wx:for="{{menuList}}"
+        wx:key="_id"
+        class="menu-item"
+      >
+        <image class="menu-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
+        <view class="menu-info">
+          <view class="menu-name">{{item.name}}</view>
+          <view class="menu-desc">{{item.description}}</view>
+          <view class="menu-bottom">
+            <view class="menu-price">¥{{item.price}}</view>
+            <view class="quantity-control">
+              <block wx:if="{{item.quantity > 0}}">
+                <view class="btn minus" bindtap="decreaseQuantity" data-id="{{item._id}}">-</view>
+                <view class="quantity">{{item.quantity}}</view>
+              </block>
+              <view class="btn plus" bindtap="increaseQuantity" data-id="{{item._id}}">+</view>
+            </view>
           </view>
         </view>
       </view>
-    </view>
-  </scroll-view>
+      <!-- Bottom spacing for cart -->
+      <view style="height: 180rpx;"></view>
+    </scroll-view>
 
-  <!-- 购物车浮层 -->
+  </view>
+
+  <!-- Floating Cart -->
   <view wx:if="{{cartTotal > 0}}" class="cart-bar" bindtap="goToCart">
     <view class="cart-info">
-      <view class="cart-icon">🛒</view>
-      <view class="cart-count">{{cartTotal}}</view>
+      <view class="cart-icon-wrapper">
+        <text class="cart-icon">🛒</text>
+        <view class="cart-count">{{cartTotal}}</view>
+      </view>
       <view class="cart-total">¥{{cartAmount}}</view>
     </view>
     <view class="cart-btn">去结算</view>

@@ -54,7 +54,7 @@ Page({
   showAbout() {
     wx.showModal({
       title: '关于我们',
-      content: '个人外卖小程序 v1.0.0\n\n用心做好每一道菜',
+      content: '璐璐私房菜 v1.0.0\n\n用心做好每一道菜',
       showCancel: false
     })
   },

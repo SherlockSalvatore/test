@@ -1,62 +1,83 @@
 <view class="page">
+  <!-- Empty Cart State -->
   <view wx:if="{{cartItems.length === 0}}" class="empty-cart">
-    <view class="empty-icon">🛒</view>
-    <view class="empty-text">购物车是空的</view>
-    <button class="go-order-btn" bindtap="goToOrder">去点餐</button>
+    <image class="empty-image" src="/images/header.png" mode="aspectFit"></image>
+    <view class="empty-text">宝贝，购物车空空如也哦~</view>
+    <button class="go-order-btn" bindtap="goToOrder">去挑选美食</button>
   </view>
 
   <view wx:else>
-    <!-- 购物车列表 -->
+    <!-- 购物车列表 (Cart List) -->
     <view class="cart-list">
       <view
         wx:for="{{cartItems}}"
         wx:key="menuId"
-        class="cart-item card"
+        class="cart-item"
       >
-        <image class="item-image" src="{{item.image}}" mode="aspectFill"></image>
+        <image class="item-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
         <view class="item-info">
           <view class="item-name">{{item.name}}</view>
-          <view class="item-price">¥{{item.price}}</view>
-        </view>
-        <view class="item-control">
-          <view class="btn minus" bindtap="decrease" data-id="{{item.menuId}}">-</view>
-          <view class="quantity">{{item.quantity}}</view>
-          <view class="btn plus" bindtap="increase" data-id="{{item.menuId}}">+</view>
+          <view class="item-bottom">
+            <view class="item-price">¥{{item.price}}</view>
+            <view class="item-control">
+              <view class="btn minus" bindtap="decrease" data-id="{{item.menuId}}">-</view>
+              <view class="quantity">{{item.quantity}}</view>
+              <view class="btn plus" bindtap="increase" data-id="{{item.menuId}}">+</view>
+            </view>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 配送信息 -->
-    <view class="delivery-section card mt-20">
-      <view class="section-title">配送信息</view>
-      <input
-        class="input-field"
-        placeholder="请输入收货人姓名"
-        value="{{address.name}}"
-        bindinput="onNameInput"
-      />
-      <input
-        class="input-field"
-        placeholder="请输入联系电话"
-        value="{{address.phone}}"
-        type="number"
-        bindinput="onPhoneInput"
-      />
-      <textarea
-        class="textarea-field"
-        placeholder="请输入详细地址"
-        value="{{address.detail}}"
-        bindinput="onAddressInput"
-      />
+    <!-- 配送信息 (Delivery Info) -->
+    <view class="delivery-section">
+      <view class="section-header">
+        <text class="section-icon">📍</text>
+        <view class="section-title">收货信息</view>
+      </view>
+      
+      <view class="input-group">
+        <input
+          class="input-field"
+          placeholder="收货人姓名 (例：璐璐妈妈)"
+          placeholder-style="color:#9ca3af;"
+          value="{{address.name}}"
+          bindinput="onNameInput"
+        />
+      </view>
+      
+      <view class="input-group">
+        <input
+          class="input-field"
+          placeholder="联系电话"
+          placeholder-style="color:#9ca3af;"
+          value="{{address.phone}}"
+          type="number"
+          bindinput="onPhoneInput"
+        />
+      </view>
+      
+      <view class="input-group">
+        <textarea
+          class="textarea-field"
+          placeholder="详细地址 (如：幸福小区1栋2单元301)"
+          placeholder-style="color:#9ca3af;"
+          value="{{address.detail}}"
+          bindinput="onAddressInput"
+        />
+      </view>
     </view>
 
-    <!-- 结算栏 -->
+    <!-- 结算栏 (Checkout Bar) -->
     <view class="checkout-bar">
       <view class="total-info">
-        <view class="total-label">合计</view>
-        <view class="total-price">¥{{totalAmount}}</view>
+        <view class="fee-label">含配送费 ¥5.00</view>
+        <view class="price-row">
+          <text class="total-label">合计:</text>
+          <text class="total-price">¥{{totalAmount}}</text>
+        </view>
       </view>
-      <button class="checkout-btn" bindtap="submitOrder">提交订单</button>
+      <button class="checkout-btn" bindtap="submitOrder">立即结算</button>
     </view>
   </view>
 </view>

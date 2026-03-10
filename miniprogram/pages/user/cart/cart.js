@@ -21,29 +21,22 @@ Page({
 
   loadCartData() {
     const app = getApp()
-    const cart = app.globalData.cart || {}
+    const cartMap = app.globalData.cart || {}
 
-    const db = wx.cloud.database()
-    const menuIds = Object.keys(cart)
+    const cartItems = Object.values(cartMap).map(item => ({
+      menuId: item._id,
+      name: item.name,
+      price: item.price,
+      image: item.image,
+      quantity: item.quantity
+    }))
 
-    if (menuIds.length === 0) {
-      this.setData({ cartItems: [] })
+    if (cartItems.length === 0) {
+      this.setData({ cartItems: [], totalAmount: "0.00" })
       return
     }
 
-    db.collection('menu').where({
-      _id: db.command.in(menuIds)
-    }).get().then(res => {
-      const cartItems = res.data.map(item => ({
-        menuId: item._id,
-        name: item.name,
-        price: item.price,
-        image: item.image,
-        quantity: cart[item._id] || 0
-      }))
-
-      this.calculateTotal(cartItems)
-    })
+    this.calculateTotal(cartItems)
   },
 
   calculateTotal(cartItems) {
@@ -62,48 +55,32 @@ Page({
   increase(e) {
     const id = e.currentTarget.dataset.id
     const app = getApp()
-    const cart = { ...app.globalData.cart }
-    cart[id] = (cart[id] || 0) + 1
+    const cartMap = { ...app.globalData.cart }
 
-    const cartItems = this.data.cartItems.map(item => {
-      if (item.menuId === id) {
-        return { ...item, quantity: item.quantity + 1 }
-      }
-      return item
-    })
+    if (cartMap[id]) {
+      cartMap[id].quantity += 1
+    }
 
-    app.globalData.cart = cart
-    this.calculateTotal(cartItems)
+    app.globalData.cart = cartMap
+    this.loadCartData()
   },
 
   decrease(e) {
     const id = e.currentTarget.dataset.id
     const app = getApp()
-    const cart = { ...app.globalData.cart }
+    const cartMap = { ...app.globalData.cart }
 
-    if (cart[id] > 0) {
-      cart[id] = cart[id] - 1
-      if (cart[id] === 0) {
-        delete cart[id]
+    if (cartMap[id] && cartMap[id].quantity > 0) {
+      cartMap[id].quantity -= 1
+      if (cartMap[id].quantity === 0) {
+        delete cartMap[id]
       }
     }
 
-    let cartItems = this.data.cartItems
-    if (cart[id]) {
-      cartItems = cartItems.map(item => {
-        if (item.menuId === id) {
-          return { ...item, quantity: item.quantity - 1 }
-        }
-        return item
-      })
-    } else {
-      cartItems = cartItems.filter(item => item.menuId !== id)
-    }
+    app.globalData.cart = cartMap
+    this.loadCartData()
 
-    app.globalData.cart = cart
-    this.calculateTotal(cartItems)
-
-    if (cartItems.length === 0) {
+    if (Object.keys(cartMap).length === 0) {
       wx.navigateBack()
     }
   },
