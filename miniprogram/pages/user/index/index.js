@@ -5,7 +5,8 @@ Page({
     menuList: [],
     cart: {},
     cartTotal: 0,
-    cartAmount: 0
+    cartAmount: 0,
+    orderedItemIds: [] // Track items already purchased
   },
 
   onLoad() {
@@ -15,6 +16,31 @@ Page({
 
   onShow() {
     this.updateCartGlobal(getApp().globalData.cart || {})
+    this.loadUserOrderedItems()
+  },
+
+  // Fetch all items the user has already bought (paid orders)
+  loadUserOrderedItems() {
+    const db = wx.cloud.database()
+    const openid = wx.getStorageSync('OPENID')
+    if (!openid) return
+
+    db.collection('orders')
+      .where({
+        _openid: openid,
+        status: db.command.in(['paid', 'cooking', 'delivering', 'completed'])
+      })
+      .get()
+      .then(res => {
+        const orderItems = res.data.reduce((acc, order) => {
+          return acc.concat(order.items.map(item => item.menuId))
+        }, [])
+        // Use a Set to remove duplicates
+        this.setData({ orderedItemIds: [...new Set(orderItems)] })
+      })
+      .catch(err => {
+        console.error('获取已下单商品失败', err)
+      })
   },
 
   loadMenu() {
@@ -104,7 +130,7 @@ Page({
   },
 
   goToCart() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/user/cart/cart'
     })
   }

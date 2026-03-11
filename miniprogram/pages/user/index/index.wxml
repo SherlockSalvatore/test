@@ -1,3 +1,10 @@
+<wxs module="helper">
+  module.exports.includes = function(arr, val) {
+    if (!arr) return false;
+    return arr.indexOf(val) !== -1;
+  }
+</wxs>
+
 <view class="page">
   <!-- Top Banner Image -->
   <view class="home-header">
@@ -25,11 +32,15 @@
       <view
         wx:for="{{menuList}}"
         wx:key="_id"
-        class="menu-item"
       >
-        <image class="menu-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
+        <view class="image-wrapper">
+          <image class="menu-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
+          <view wx:if="{{helper.includes(orderedItemIds, item._id)}}" class="bought-tag">已购</view>
+        </view>
         <view class="menu-info">
-          <view class="menu-name">{{item.name}}</view>
+          <view class="menu-name">
+            {{item.name}}
+          </view>
           <view class="menu-desc">{{item.description}}</view>
           <view class="menu-bottom">
             <view class="menu-price">¥{{item.price}}</view>

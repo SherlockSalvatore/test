@@ -158,9 +158,9 @@ Page({
         getApp().globalData.cart = {}
 
         setTimeout(() => {
-          // orders is a tabbar page, so we must use switchTab
-          wx.switchTab({
-            url: '/pages/user/orders/orders'
+          // orders is NO LONGER a tabbar page, use redirectTo
+          wx.redirectTo({
+            url: '/pages/user/orders/orders?status=paid'
           })
         }, 1500)
         return
@@ -183,8 +183,8 @@ Page({
           wx.showToast({ title: '支付成功', icon: 'success' })
           getApp().globalData.cart = {}
           setTimeout(() => {
-            wx.switchTab({
-              url: '/pages/user/orders/orders'
+            wx.redirectTo({
+              url: '/pages/user/orders/orders?status=paid'
             })
           }, 1500)
         },

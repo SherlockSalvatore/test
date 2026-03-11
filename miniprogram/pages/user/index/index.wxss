@@ -83,13 +83,32 @@ page {
   box-shadow: 0 4rpx 15rpx rgba(34, 197, 94, 0.08); /* Mint green shadow */
 }
 
-.menu-image {
+.image-wrapper {
+  position: relative;
   width: 160rpx;
   height: 160rpx;
-  border-radius: 12rpx;
-  background-color: #f3f4f6;
   margin-right: 20rpx;
   flex-shrink: 0;
+}
+
+.menu-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+  background-color: #f3f4f6;
+}
+
+.bought-tag {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(34, 197, 94, 0.85); /* Slightly transparent mint green */
+  color: white;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx 0 12rpx 0;
+  font-weight: bold;
+  box-shadow: 2rpx 2rpx 6rpx rgba(0,0,0,0.1);
 }
 
 .menu-info {
