@@ -142,9 +142,19 @@ Page({
   // 格式化时间
   formatTime(timestamp) {
     if (!timestamp) return ''
-    // Handle cloud Date objects which might have a different structure
-    const dateValue = typeof timestamp === 'object' ? timestamp.getTime() : timestamp
-    const date = new Date(dateValue)
+
+    // Cloud DB returns Date objects, ISO strings, or raw numbers depending on how data is fetched.
+    let date;
+    if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+      date = new Date(timestamp)
+    } else if (timestamp.getTime) {
+      date = new Date(timestamp.getTime())
+    } else {
+      date = new Date(timestamp) // Fallback
+    }
+
+    if (isNaN(date.getTime())) return '' // Invalid date fallback
+
     const year = date.getFullYear()
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
     const day = date.getDate().toString().padStart(2, '0')
