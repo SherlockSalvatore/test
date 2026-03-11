@@ -55,7 +55,7 @@
       </view>
       <view class="info-item">
         <text class="label">下单时间：</text>
-        <text>{{formatTime(order.createTime)}}</text>
+        <text>{{order.formattedTime}}</text>
       </view>
       <view wx:if="{{order.paymentId}}" class="info-item">
         <text class="label">支付状态：</text>

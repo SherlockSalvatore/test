@@ -32,6 +32,10 @@ Page({
           }, 1500)
           return
         }
+
+        // Format the time here because WXML cannot call page methods directly
+        order.formattedTime = this.formatTime(order.createTime)
+
         this.setData({ order, loading: false })
       })
       .catch(err => {
