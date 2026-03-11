@@ -1,4 +1,11 @@
 <view class="page">
+  <!-- 顶部状态分类 Tab -->
+  <view class="tabs">
+    <view class="tab-item {{currentStatus === 'all' ? 'active' : ''}}" bindtap="switchTab" data-status="all">全部</view>
+    <view class="tab-item {{currentStatus === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-status="pending">待支付</view>
+    <view class="tab-item {{currentStatus === 'delivering' ? 'active' : ''}}" bindtap="switchTab" data-status="delivering">配送中</view>
+    <view class="tab-item {{currentStatus === 'completed' ? 'active' : ''}}" bindtap="switchTab" data-status="completed">已完成</view>
+  </view>
   <view wx:if="{{orderList.length === 0}}" class="empty-orders">
     <view class="empty-icon">📋</view>
     <view class="empty-text">暂无订单</view>

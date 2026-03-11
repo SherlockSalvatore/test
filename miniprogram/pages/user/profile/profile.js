@@ -67,9 +67,8 @@ Page({
   // 跳转到订单列表
   goToOrders(e) {
     const status = e.currentTarget.dataset.status
-    // Optional: Pass status parameter if your orders page supports it
-    wx.switchTab({
-      url: '/pages/user/orders/orders'
+    wx.navigateTo({
+      url: `/pages/user/orders/orders?status=${status}`
     })
   },
 

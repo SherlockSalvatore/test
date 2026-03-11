@@ -1,9 +1,13 @@
 Page({
   data: {
-    orderList: []
+    orderList: [],
+    currentStatus: 'all'
   },
 
-  onLoad() {
+  onLoad(options) {
+    if (options.status) {
+      this.setData({ currentStatus: options.status })
+    }
     this.loadOrders()
   },
 
@@ -24,8 +28,13 @@ Page({
       return
     }
 
+    let query = { _openid: openid }
+    if (this.data.currentStatus && this.data.currentStatus !== 'all') {
+      query.status = this.data.currentStatus
+    }
+
     db.collection('orders')
-      .where({ _openid: openid })
+      .where(query)
       .orderBy('createTime', 'desc')
       .get()
       .then(res => {
@@ -42,6 +51,13 @@ Page({
     wx.navigateTo({
       url: `/pages/user/order/order?id=${id}`
     })
+  },
+
+  // 切换顶部状态 Tab
+  switchTab(e) {
+    const status = e.currentTarget.dataset.status
+    this.setData({ currentStatus: status })
+    this.loadOrders()
   },
 
   // 获取状态文本
