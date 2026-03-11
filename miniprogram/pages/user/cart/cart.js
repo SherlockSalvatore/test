@@ -81,7 +81,7 @@ Page({
     this.loadCartData()
 
     if (Object.keys(cartMap).length === 0) {
-      wx.navigateBack()
+      wx.showToast({ title: '已清空购物车', icon: 'none' })
     }
   },
 
@@ -104,7 +104,9 @@ Page({
   },
 
   goToOrder() {
-    wx.navigateBack()
+    wx.switchTab({
+      url: '/pages/user/index/index'
+    })
   },
 
   submitOrder() {
@@ -158,8 +160,8 @@ Page({
         getApp().globalData.cart = {}
 
         setTimeout(() => {
-          // orders is NO LONGER a tabbar page, use redirectTo
-          wx.redirectTo({
+          // Use navigateTo instead of redirectTo to get a "Back" button (Image 3)
+          wx.navigateTo({
             url: '/pages/user/orders/orders?status=paid'
           })
         }, 1500)
@@ -183,7 +185,7 @@ Page({
           wx.showToast({ title: '支付成功', icon: 'success' })
           getApp().globalData.cart = {}
           setTimeout(() => {
-            wx.redirectTo({
+            wx.navigateTo({
               url: '/pages/user/orders/orders?status=paid'
             })
           }, 1500)

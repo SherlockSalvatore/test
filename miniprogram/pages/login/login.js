@@ -4,6 +4,23 @@ Page({
     showPopup: false // Track popup visibility
   },
 
+  onLoad() {
+    this.checkAutoLogin();
+  },
+
+  // Check if we should skip the login page
+  checkAutoLogin() {
+    const token = wx.getStorageSync('token');
+    const role = wx.getStorageSync('userRole');
+    if (token) {
+      if (role === 'admin') {
+        wx.redirectTo({ url: '/pages/admin/orders/orders' });
+      } else {
+        wx.switchTab({ url: '/pages/user/index/index' });
+      }
+    }
+  },
+
   // 监听复选框变化
   onAgreementChange(e) {
     this.setData({
