@@ -143,7 +143,7 @@ Page({
   formatTime(timestamp) {
     if (!timestamp) return ''
     // Handle cloud Date objects which might have a different structure
-    const dateValue = timestamp.getTime ? timestamp.getTime() : timestamp
+    const dateValue = typeof timestamp === 'object' ? timestamp.getTime() : timestamp
     const date = new Date(dateValue)
     const year = date.getFullYear()
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
