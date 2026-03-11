@@ -10,7 +10,7 @@ Page({
     }
   },
 
-    // 加载订单详情
+  // 加载订单详情
   loadOrderDetail(orderId) {
     const db = wx.cloud.database()
     const app = getApp()
@@ -22,7 +22,7 @@ Page({
       .then(res => {
         const order = res.data
         // 验证是否是当前用户的订单
-        if (order.userId !== openid) {
+        if (order._openid !== openid) {
           wx.showToast({
             title: '无权查看此订单',
             icon: 'none'
@@ -142,7 +142,9 @@ Page({
   // 格式化时间
   formatTime(timestamp) {
     if (!timestamp) return ''
-    const date = new Date(timestamp)
+    // Handle cloud Date objects which might have a different structure
+    const dateValue = timestamp.getTime ? timestamp.getTime() : timestamp
+    const date = new Date(dateValue)
     const year = date.getFullYear()
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
     const day = date.getDate().toString().padStart(2, '0')

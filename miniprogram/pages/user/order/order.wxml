@@ -14,15 +14,15 @@
       <view class="section-title">配送信息</view>
       <view class="address-item">
         <text class="label">收货人：</text>
-        <text>{{order.userName}}</text>
+        <text>{{order.address.name || '未知'}}</text>
       </view>
       <view class="address-item">
         <text class="label">电话：</text>
-        <text>{{order.phone}}</text>
+        <text>{{order.address.phone || '未知'}}</text>
       </view>
       <view class="address-item">
         <text class="label">地址：</text>
-        <text>{{order.address}}</text>
+        <text>{{order.address.detail || '未知'}}</text>
       </view>
     </view>
 

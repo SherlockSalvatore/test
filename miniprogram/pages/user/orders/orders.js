@@ -65,7 +65,9 @@ Page({
   // 格式化时间
   formatTime(timestamp) {
     if (!timestamp) return ''
-    const date = new Date(timestamp)
+    // WeChat Cloud Database returns timestamps as string dates natively sometimes
+    const dateValue = typeof timestamp === 'object' ? timestamp.getTime() : timestamp
+    const date = new Date(dateValue)
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
     const day = date.getDate().toString().padStart(2, '0')
     const hour = date.getHours().toString().padStart(2, '0')

@@ -16,7 +16,7 @@
         bindblur="onNicknameInput" 
         bindchange="onNicknameChange"
       />
-      <view class="welcome-text">欢迎来到璐璐私房菜！</view>
+      <view class="welcome-text">欢迎来到璐璐私房菜~</view>
     </view>
   </view>
 
