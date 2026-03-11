@@ -6,7 +6,7 @@ Page({
     cart: {},
     cartTotal: 0,
     cartAmount: 0,
-    orderedItemIds: [] // Track items already purchased
+    orderedItemCounts: {} // Track purchase frequency for each item
   },
 
   onLoad() {
@@ -32,11 +32,14 @@ Page({
       })
       .get()
       .then(res => {
-        const orderItems = res.data.reduce((acc, order) => {
-          return acc.concat(order.items.map(item => item.menuId))
-        }, [])
-        // Use a Set to remove duplicates
-        this.setData({ orderedItemIds: [...new Set(orderItems)] })
+        const counts = {}
+        res.data.forEach(order => {
+          order.items.forEach(item => {
+            const id = item.menuId
+            counts[id] = (counts[id] || 0) + item.quantity
+          })
+        })
+        this.setData({ orderedItemCounts: counts })
       })
       .catch(err => {
         console.error('获取已下单商品失败', err)
