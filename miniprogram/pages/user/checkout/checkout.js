@@ -1,3 +1,4 @@
+const { getTempUrl } = require('../../utils/cloudImage')
 const db = wx.cloud.database()
 const DELIVERY_FEE = 5 // 默认配送费
 
@@ -24,12 +25,28 @@ Page({
       }).get()
       
       let subtotal = 0
-      res.data.forEach(item => {
+      let items = res.data.map(item => {
         subtotal += item.price * item.quantity
+        return {
+          ...item,
+          image: typeof item.image === 'string' ? item.image.trim() : item.image
+        }
       })
 
+      // 批量获取临时 HTTPS 链接
+      const fileList = items.map(it => it.image).filter(img => img && img.startsWith('cloud://'))
+      if (fileList.length > 0) {
+        const urls = await getTempUrl(fileList)
+        const urlMap = {}
+        fileList.forEach((fid, idx) => { urlMap[fid] = urls[idx] })
+        items = items.map(it => ({
+          ...it,
+          image: urlMap[it.image] || it.image
+        }))
+      }
+
       this.setData({
-        selectedItems: res.data,
+        selectedItems: items,
         subtotal: subtotal.toFixed(2),
         totalPrice: (subtotal + DELIVERY_FEE).toFixed(2)
       })

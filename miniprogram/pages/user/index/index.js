@@ -1,3 +1,5 @@
+const { getTempUrl } = require('../../utils/cloudImage')
+
 Page({
   data: {
     categories: ['全部', '美食套餐', '手工面点', '鲜榨果蔬', '健康零食'],
@@ -66,14 +68,30 @@ Page({
       query.category = this.data.currentCategory
     }
 
-    collection.where(query).get().then(res => {
-      const cart = this.data.cart || {}
-      const menuList = res.data.map(item => {
+    collection.where(query).get().then(async res => {
+      const cart = this.data.cart || []
+      let menuList = res.data.map(item => {
         return {
           ...item,
-          quantity: cart[item._id] ? cart[item._id].quantity : 0
+          // 预清洗：去除可能存在的空格
+          image: typeof item.image === 'string' ? item.image.trim() : item.image,
+          quantity: 0 // 初始值，由 calculateTotal 同步
         }
       })
+
+      // 批量转换云端 ID 为 https 链接
+      const fileList = menuList.map(it => it.image).filter(img => img && img.startsWith('cloud://'))
+      if (fileList.length > 0) {
+        const urls = await getTempUrl(fileList)
+        // 建立映射
+        const urlMap = {}
+        fileList.forEach((fid, idx) => { urlMap[fid] = urls[idx] })
+        menuList = menuList.map(item => ({
+          ...item,
+          image: urlMap[item.image] || item.image
+        }))
+      }
+
       this.setData({ menuList })
       wx.hideLoading()
     }).catch(err => {

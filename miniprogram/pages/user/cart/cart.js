@@ -1,3 +1,4 @@
+const { getTempUrl } = require('../../utils/cloudImage')
 const db = wx.cloud.database()
 
 Page({
@@ -17,7 +18,24 @@ Page({
     wx.showLoading({ title: '同步中' })
     try {
       const res = await db.collection('carts').get()
-      this.setData({ cartList: res.data })
+      let list = res.data.map(item => ({
+        ...item,
+        image: typeof item.image === 'string' ? item.image.trim() : item.image
+      }))
+
+      // 批量获取临时 HTTPS 链接
+      const fileList = list.map(it => it.image).filter(img => img && img.startsWith('cloud://'))
+      if (fileList.length > 0) {
+        const urls = await getTempUrl(fileList)
+        const urlMap = {}
+        fileList.forEach((fid, idx) => { urlMap[fid] = urls[idx] })
+        list = list.map(it => ({
+          ...it,
+          image: urlMap[it.image] || it.image
+        }))
+      }
+
+      this.setData({ cartList: list })
       this.calculateTotal()
     } catch (err) {
       console.error('加载购物车失败', err)
