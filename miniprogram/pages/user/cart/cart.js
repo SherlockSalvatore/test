@@ -1,4 +1,4 @@
-const { getTempUrl } = require('../../utils/cloudImage')
+const { getTempUrl } = require('../../../utils/cloudImage')
 const db = wx.cloud.database()
 
 Page({
