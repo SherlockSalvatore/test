@@ -92,7 +92,10 @@ Page({
 
       const { orderId } = res.result
       
-      // 2. 支付流程
+      // 2. 核心改进：只要订单创建成功，立即清理购物车中选中的商品项
+      await this.clearPaidCartItems()
+      
+      // 3. 进入支付流程
       this.handlePayment(orderId)
       
     } catch (err) {

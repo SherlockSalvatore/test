@@ -4,8 +4,8 @@
   <view wx:else>
     <!-- 订单状态 -->
     <view class="status-section card">
-      <view class="status-icon">{{getStatusIcon(order.status)}}</view>
-      <view class="status-text {{getStatusClass(order.status)}}">{{getStatusText(order.status)}}</view>
+      <view class="status-icon">{{order.statusIcon}}</view>
+      <view class="status-text {{order.statusClass}}">{{order.statusText}}</view>
       <view wx:if="{{order.status === 'delivering'}}" class="status-tip">配送员正在快马加鞭赶往您那里~</view>
     </view>
 

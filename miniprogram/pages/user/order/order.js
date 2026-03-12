@@ -35,6 +35,11 @@ Page({
 
         // Format the time here because WXML cannot call page methods directly
         order.formattedTime = this.formatTime(order.createTime)
+        
+        // 预计算状态展示
+        order.statusText = this.getStatusText(order.status)
+        order.statusIcon = this.getStatusIcon(order.status)
+        order.statusClass = order.status
 
         this.setData({ order, loading: false })
       })
@@ -80,9 +85,17 @@ Page({
     wx.cloud.callFunction({
       name: 'order-payment',
       data: { orderId: this.data.order._id }
-    }).then(res => {
-      const { timeStamp, nonceStr, pkg, signType, paySign } = res.result
+    }).then(async res => {
+      // 兼容模拟支付逻辑
+      if (res.result && res.result.mockPayment) {
+        wx.showToast({ title: '支付成功', icon: 'success' })
+        setTimeout(() => {
+          this.loadOrderDetail(this.data.order._id)
+        }, 1500)
+        return
+      }
 
+      const { timeStamp, nonceStr, pkg, signType, paySign } = res.result
       wx.requestPayment({
         timeStamp,
         nonceStr,
