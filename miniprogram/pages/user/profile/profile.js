@@ -64,6 +64,13 @@ Page({
     }
   },
 
+  // 跳转地址管理
+  goToAddress() {
+    wx.navigateTo({
+      url: '/pages/user/address/address'
+    })
+  },
+
   // 跳转到订单列表
   goToOrders(e) {
     const status = e.currentTarget.dataset.status

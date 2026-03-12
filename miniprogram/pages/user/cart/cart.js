@@ -13,10 +13,21 @@ Page({
 
   onLoad() {
     this.loadCartData()
+    this.loadDefaultAddress()
   },
 
   onShow() {
     this.loadCartData()
+    this.loadDefaultAddress()
+  },
+
+  loadDefaultAddress() {
+    const defaultAddress = wx.getStorageSync('default_address')
+    if (defaultAddress) {
+      this.setData({
+        address: defaultAddress
+      })
+    }
   },
 
   loadCartData() {

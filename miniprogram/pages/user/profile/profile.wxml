@@ -39,15 +39,18 @@
         <view class="menu-icon">🛵</view>
         <view class="menu-text">配送中</view>
       </view>
-      <view class="order-menu-item" bindtap="goToOrders" data-status="completed">
-        <view class="menu-icon">✅</view>
-        <view class="menu-text">已完成</view>
-      </view>
     </view>
   </view>
 
   <!-- 其他功能 (Other Features) -->
   <view class="other-section card">
+    <view class="menu-list-item" bindtap="goToAddress" style="border-bottom: 2rpx solid #f1f5f9; padding-bottom: 24rpx; margin-bottom: 12rpx;">
+      <view class="item-left">
+        <text class="item-icon">📍</text>
+        <text class="item-text">我的收货地址</text>
+      </view>
+      <text class="item-arrow">❯</text>
+    </view>
     <view class="menu-list-item" bindtap="showAbout">
       <view class="item-left">
         <text class="item-icon">👨‍🍳</text>
