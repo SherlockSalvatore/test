@@ -38,8 +38,11 @@
     </view>
     <view class="footer-right">
       <view class="total-info">
-        <text class="total-label">合计：</text>
-        <text class="total-price">¥{{totalPrice}}</text>
+        <view class="price-row">
+          <text class="total-label">合计：</text>
+          <text class="total-price">¥{{totalPrice}}</text>
+        </view>
+        <view class="fee-summary">运费 ¥5 | 包装费 ¥0</view>
       </view>
       <button class="checkout-btn" bindtap="goToCheckout">
         结算({{selectedCount}})
