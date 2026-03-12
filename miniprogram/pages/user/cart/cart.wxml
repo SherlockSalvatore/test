@@ -1,10 +1,5 @@
 <view class="page">
-  <!-- Empty Cart State -->
-  <view wx:if="{{cartItems.length === 0}}" class="empty-cart">
-    <image class="empty-image" src="/images/header.png" mode="aspectFit"></image>
-    <view class="empty-text">宝贝，购物车空空如也哦~</view>
-    <button class="go-order-btn" bindtap="goToOrder">去挑选美食</button>
-  <!-- 购物车列表 (List) -->
+  <!-- 1. 购物车列表 (List) -->
   <view wx:if="{{cartList.length > 0}}" class="cart-container">
     <view class="cart-list">
       <view class="cart-item card" wx:for="{{cartList}}" wx:key="_id">
@@ -25,16 +20,30 @@
         </view>
       </view>
     </view>
-    <!-- 结算栏 (Checkout Bar) -->
-    <view class="checkout-bar">
+    <view style="height: 140rpx;"></view>
+  </view>
+
+  <!-- 2. 空状态 (Empty) -->
+  <view wx:else class="empty-cart">
+    <view class="empty-icon">🛒</view>
+    <view class="empty-text">您的购物车还空空如也~</view>
+    <button class="go-btn" bindtap="goToHome">去挑选美食</button>
+  </view>
+
+  <!-- 3. 底部结算栏 (Footer) -->
+  <view wx:if="{{cartList.length > 0}}" class="cart-footer">
+    <view class="footer-left" bindtap="toggleCheckAll">
+      <icon type="{{checkAll ? 'success' : 'circle'}}" size="22" color="{{checkAll ? '#22c55e' : '#cbd5e1'}}"></icon>
+      <text class="all-text">全选</text>
+    </view>
+    <view class="footer-right">
       <view class="total-info">
-        <view class="fee-label">含配送费 ¥5.00</view>
-        <view class="price-row">
-          <text class="total-label">合计:</text>
-          <text class="total-price">¥{{totalAmount}}</text>
-        </view>
+        <text class="total-label">合计：</text>
+        <text class="total-price">¥{{totalPrice}}</text>
       </view>
-      <button class="checkout-btn" bindtap="submitOrder">立即结算</button>
+      <button class="checkout-btn" bindtap="goToCheckout">
+        结算({{selectedCount}})
+      </button>
     </view>
   </view>
 </view>
