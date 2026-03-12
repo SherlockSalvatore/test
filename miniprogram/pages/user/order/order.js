@@ -14,7 +14,7 @@ Page({
   loadOrderDetail(orderId) {
     const db = wx.cloud.database()
     const app = getApp()
-    const openid = app.globalData.userInfo?.openid || ''
+    const openid = wx.getStorageSync('OPENID') || app.globalData.userInfo?.openid || ''
 
     db.collection('orders')
       .doc(orderId)
