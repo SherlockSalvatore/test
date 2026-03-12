@@ -1,11 +1,15 @@
 <view class="page">
-  <!-- 顶部状态分类 Tab -->
-  <view class="tabs">
-    <view class="tab-item {{currentStatus === 'all' ? 'active' : ''}}" bindtap="switchTab" data-status="all">全部</view>
-    <view class="tab-item {{currentStatus === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-status="pending">待支付</view>
-    <view class="tab-item {{currentStatus === 'delivering' ? 'active' : ''}}" bindtap="switchTab" data-status="delivering">配送中</view>
-    <view class="tab-item {{currentStatus === 'completed' ? 'active' : ''}}" bindtap="switchTab" data-status="completed">已完成</view>
-  </view>
+  <!-- 顶部状态分类 Tab (可滑动) -->
+  <scroll-view scroll-x class="tabs-scroll">
+    <view class="tabs">
+      <view class="tab-item {{currentStatus === 'all' ? 'active' : ''}}" bindtap="switchTab" data-status="all">全部</view>
+      <view class="tab-item {{currentStatus === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-status="pending">待支付</view>
+      <view class="tab-item {{currentStatus === 'cooking' ? 'active' : ''}}" bindtap="switchTab" data-status="cooking">制作中</view>
+      <view class="tab-item {{currentStatus === 'delivering' ? 'active' : ''}}" bindtap="switchTab" data-status="delivering">配送中</view>
+      <view class="tab-item {{currentStatus === 'completed' ? 'active' : ''}}" bindtap="switchTab" data-status="completed">已完成</view>
+      <view class="tab-item {{currentStatus === 'cancelled' ? 'active' : ''}}" bindtap="switchTab" data-status="cancelled">已取消</view>
+    </view>
+  </scroll-view>
   <view wx:if="{{orderList.length === 0}}" class="empty-orders">
     <view class="empty-icon">📋</view>
     <view class="empty-text">暂无订单</view>
@@ -21,7 +25,7 @@
     >
       <view class="order-header">
         <view class="order-id">订单号：{{item.outTradeNo ? item.outTradeNo : item._id}}</view>
-        <view class="order-status {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</view>
+        <view class="order-status {{getStatusClass(item.status)}}">{{item.formattedStatus}}</view>
       </view>
       <view class="order-items">
         <view wx:for="{{item.items}}" wx:key="menuId" wx:for-item="subItem" class="item-summary">
@@ -30,7 +34,7 @@
         </view>
       </view>
       <view class="order-footer">
-        <view class="order-time">{{formatTime(item.createTime)}}</view>
+        <view class="order-time">{{item.formattedTime}}</view>
         <view class="order-amount">¥{{item.totalAmount}}</view>
       </view>
     </view>

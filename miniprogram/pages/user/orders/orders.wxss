@@ -1,16 +1,24 @@
-.tabs {
-  display: flex;
+.tabs-scroll {
+  width: 100%;
   background: #fff;
-  padding: 0 20rpx;
-  margin-bottom: 20rpx;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   border-radius: 0 0 20rpx 20rpx;
   box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.02);
 }
 
+.tabs {
+  display: inline-flex;
+  padding: 0 20rpx;
+  min-width: 100%;
+}
+
 .tab-item {
-  flex: 1;
+  flex-shrink: 0;
+  padding: 24rpx 30rpx;
   text-align: center;
-  padding: 24rpx 0;
   font-size: 28rpx;
   color: #666;
   position: relative;

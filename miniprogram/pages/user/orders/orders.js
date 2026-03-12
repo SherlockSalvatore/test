@@ -38,7 +38,14 @@ Page({
       .orderBy('createTime', 'desc')
       .get()
       .then(res => {
-        this.setData({ orderList: res.data })
+        const orderList = res.data.map(order => {
+          return {
+            ...order,
+            formattedTime: this.formatTime(order.createTime),
+            formattedStatus: this.getStatusText(order.status)
+          }
+        })
+        this.setData({ orderList })
       })
       .catch(err => {
         console.error('加载订单失败', err)
