@@ -61,24 +61,38 @@ Page({
 
   // 增加数量
   async increase(e) {
-    const id = e.currentTarget.dataset.id
+    const { id, menuid } = e.currentTarget.dataset
+    wx.showLoading({ title: '处理中' })
     try {
-      await db.collection('carts').doc(id).update({
-        data: { quantity: db.command.inc(1) }
+      await wx.cloud.callFunction({
+        name: 'cart-manager',
+        data: {
+          action: 'updateQuantity',
+          menuId: menuid,
+          delta: 1
+        }
       })
       this.loadCart()
     } catch (err) {
       console.error('更新失败', err)
+    } finally {
+      wx.hideLoading()
     }
   },
 
   // 减少数量
   async decrease(e) {
-    const { id, quantity } = e.currentTarget.dataset
+    const { id, quantity, menuid } = e.currentTarget.dataset
     try {
       if (quantity > 1) {
-        await db.collection('carts').doc(id).update({
-          data: { quantity: db.command.inc(-1) }
+        wx.showLoading({ title: '处理中' })
+        await wx.cloud.callFunction({
+          name: 'cart-manager',
+          data: {
+            action: 'updateQuantity',
+            menuId: menuid,
+            delta: -1
+          }
         })
       } else {
         const res = await wx.showModal({
@@ -86,12 +100,17 @@ Page({
           content: '确定要从购物车移除吗？'
         })
         if (res.confirm) {
+          wx.showLoading({ title: '处理中' })
           await db.collection('carts').doc(id).remove()
+        } else {
+          return
         }
       }
       this.loadCart()
     } catch (err) {
       console.error('更新失败', err)
+    } finally {
+      wx.hideLoading()
     }
   },
 

@@ -90,58 +90,54 @@ Page({
     })
   },
 
-  // 增加数量 (同步云端)
+  // 增加数量 (改用云函数原子加)
   async increaseQuantity(e) {
     const item = e.currentTarget.dataset.item
     if (!item) return
     
-    const db = wx.cloud.database()
-    const cartItem = this.data.cart.find(c => c.menuId === item._id)
-
+    wx.showLoading({ title: '处理中', mask: true })
     try {
-      if (cartItem) {
-        await db.collection('carts').doc(cartItem._id).update({
-          data: { quantity: db.command.inc(1) }
-        })
-      } else {
-        await db.collection('carts').add({
-          data: {
-            menuId: item._id,
+      await wx.cloud.callFunction({
+        name: 'cart-manager',
+        data: {
+          action: 'updateQuantity',
+          menuId: item._id,
+          delta: 1,
+          itemData: {
             name: item.name,
             price: item.price,
-            image: item.image,
-            quantity: 1,
-            checked: true // 默认选中
+            image: item.image
           }
-        })
-      }
+        }
+      })
       this.loadCart()
     } catch (err) {
       console.error('更新购物车失败', err)
+    } finally {
+      wx.hideLoading()
     }
   },
 
-  // 减少数量 (同步云端)
+  // 减少数量 (改用云函数原子减)
   async decreaseQuantity(e) {
     const item = e.currentTarget.dataset.item
     if (!item) return
     
-    const db = wx.cloud.database()
-    const cartItem = this.data.cart.find(c => c.menuId === item._id)
-
-    if (!cartItem) return
-
+    wx.showLoading({ title: '处理中', mask: true })
     try {
-      if (cartItem.quantity > 1) {
-        await db.collection('carts').doc(cartItem._id).update({
-          data: { quantity: db.command.inc(-1) }
-        })
-      } else {
-        await db.collection('carts').doc(cartItem._id).remove()
-      }
+      await wx.cloud.callFunction({
+        name: 'cart-manager',
+        data: {
+          action: 'updateQuantity',
+          menuId: item._id,
+          delta: -1
+        }
+      })
       this.loadCart()
     } catch (err) {
       console.error('更新购物车失败', err)
+    } finally {
+      wx.hideLoading()
     }
   },
 

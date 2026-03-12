@@ -12,9 +12,9 @@
           <view class="item-bottom">
             <view class="item-price">¥{{item.price}}</view>
             <view class="quantity-control">
-              <view class="btn minus" bindtap="decrease" data-id="{{item._id}}" data-quantity="{{item.quantity}}">-</view>
+              <view class="btn minus" bindtap="decrease" data-id="{{item._id}}" data-menuid="{{item.menuId}}" data-quantity="{{item.quantity}}">-</view>
               <view class="num">{{item.quantity}}</view>
-              <view class="btn plus" bindtap="increase" data-id="{{item._id}}">+</view>
+              <view class="btn plus" bindtap="increase" data-id="{{item._id}}" data-menuid="{{item.menuId}}">+</view>
             </view>
           </view>
         </view>
