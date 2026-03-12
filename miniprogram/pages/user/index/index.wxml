@@ -1,9 +1,20 @@
 <wxs module="helper">
-  module.exports.getCount = function(counts, id) {
-    if (!counts || !counts[id]) return 0;
-    return counts[id];
-  }
-</wxs>
+    var getCount = function(item, cart) {
+      if (!cart || !cart.length) return 0;
+      for (var i = 0; i < cart.length; i++) {
+        if (cart[i].menuId === item._id) return cart[i].quantity;
+      }
+      return 0;
+    }
+    var getPurchaseCount = function(itemId, orderedItemCounts) {
+      if (!orderedItemCounts) return 0;
+      return orderedItemCounts[itemId] || 0;
+    }
+    module.exports = {
+      getCount: getCount,
+      getPurchaseCount: getPurchaseCount
+    }
+  </wxs>
 
 <view class="page">
   <!-- Top Banner Image -->
@@ -35,7 +46,7 @@
       >
         <view class="image-wrapper">
           <image class="menu-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
-          <view wx:if="{{orderedItemCounts[item._id] > 0}}" class="bought-tag">回购 {{orderedItemCounts[item._id]}} 次</view>
+          <view wx:if="{{helper.getPurchaseCount(item._id, orderedItemCounts) > 0}}" class="bought-tag">回购 {{orderedItemCounts[item._id]}} 次</view>
         </view>
         <view class="menu-info">
           <view class="menu-name">
@@ -45,11 +56,11 @@
           <view class="menu-bottom">
             <view class="menu-price">¥{{item.price}}</view>
             <view class="quantity-control">
-              <block wx:if="{{item.quantity > 0}}">
-                <view class="btn minus" bindtap="decreaseQuantity" data-id="{{item._id}}">-</view>
-                <view class="quantity">{{item.quantity}}</view>
+              <block wx:if="{{helper.getCount(item, cart) > 0}}">
+                <view class="btn minus" catchtap="decreaseQuantity" data-item="{{item}}">-</view>
+                <view class="quantity">{{helper.getCount(item, cart)}}</view>
               </block>
-              <view class="btn plus" bindtap="increaseQuantity" data-id="{{item._id}}">+</view>
+              <view class="btn plus" catchtap="increaseQuantity" data-item="{{item}}">+</view>
             </view>
           </view>
         </view>

@@ -3,20 +3,30 @@ Page({
     categories: ['全部', '美食套餐', '手工面点', '鲜榨果蔬', '健康零食'],
     currentCategory: '全部',
     menuList: [],
-    cart: {},
+    cart: [], // 存储云端购物车数组 [{menuId, quantity, checked, ...}]
     cartTotal: 0,
     cartAmount: 0,
-    orderedItemCounts: {} // Track purchase frequency for each item
+    orderedItemCounts: {} // 追踪回购次数
   },
 
   onLoad() {
-    this.setData({ cart: getApp().globalData.cart || {} })
     this.loadMenu()
   },
 
   onShow() {
-    this.updateCartGlobal(getApp().globalData.cart || {})
+    this.loadCart()
     this.loadUserOrderedItems()
+  },
+
+  // 从云端加载购物车
+  async loadCart() {
+    const db = wx.cloud.database()
+    try {
+      const res = await db.collection('carts').get()
+      this.calculateTotal(res.data)
+    } catch (err) {
+      console.error('加载购物车失败', err)
+    }
   },
 
   // Fetch all items the user has already bought (paid orders)
@@ -80,56 +90,74 @@ Page({
     })
   },
 
-  increaseQuantity(e) {
-    const id = e.currentTarget.dataset.id
-    const item = this.data.menuList.find(i => i._id === id)
-    if (!item) return;
+  // 增加数量 (同步云端)
+  async increaseQuantity(e) {
+    const item = e.currentTarget.dataset.item
+    if (!item) return
+    
+    const db = wx.cloud.database()
+    const cartItem = this.data.cart.find(c => c.menuId === item._id)
 
-    const cart = { ...this.data.cart }
-    if (cart[id]) {
-      cart[id].quantity += 1
-    } else {
-      cart[id] = { ...item, quantity: 1 }
-    }
-    this.updateCartGlobal(cart)
-  },
-
-  decreaseQuantity(e) {
-    const id = e.currentTarget.dataset.id
-    const cart = { ...this.data.cart }
-    if (cart[id] && cart[id].quantity > 0) {
-      cart[id].quantity -= 1
-      if (cart[id].quantity === 0) {
-        delete cart[id]
+    try {
+      if (cartItem) {
+        await db.collection('carts').doc(cartItem._id).update({
+          data: { quantity: db.command.inc(1) }
+        })
+      } else {
+        await db.collection('carts').add({
+          data: {
+            menuId: item._id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            quantity: 1,
+            checked: true // 默认选中
+          }
+        })
       }
-      this.updateCartGlobal(cart)
+      this.loadCart()
+    } catch (err) {
+      console.error('更新购物车失败', err)
     }
   },
 
-  updateCartGlobal(cart) {
+  // 减少数量 (同步云端)
+  async decreaseQuantity(e) {
+    const item = e.currentTarget.dataset.item
+    if (!item) return
+    
+    const db = wx.cloud.database()
+    const cartItem = this.data.cart.find(c => c.menuId === item._id)
+
+    if (!cartItem) return
+
+    try {
+      if (cartItem.quantity > 1) {
+        await db.collection('carts').doc(cartItem._id).update({
+          data: { quantity: db.command.inc(-1) }
+        })
+      } else {
+        await db.collection('carts').doc(cartItem._id).remove()
+      }
+      this.loadCart()
+    } catch (err) {
+      console.error('更新购物车失败', err)
+    }
+  },
+
+  calculateTotal(cartArray) {
     let total = 0
     let amount = 0
-
-    Object.values(cart).forEach(cartItem => {
-      total += cartItem.quantity
-      amount += cartItem.price * cartItem.quantity
-    })
-
-    const updatedMenuList = this.data.menuList.map(item => {
-      return {
-        ...item,
-        quantity: cart[item._id] ? cart[item._id].quantity : 0
-      }
+    cartArray.forEach(item => {
+      total += item.quantity
+      amount += item.price * item.quantity
     })
 
     this.setData({
-      cart,
+      cart: cartArray,
       cartTotal: total,
-      cartAmount: amount.toFixed(2),
-      menuList: updatedMenuList
+      cartAmount: amount.toFixed(2)
     })
-
-    getApp().globalData.cart = cart
   },
 
   goToCart() {

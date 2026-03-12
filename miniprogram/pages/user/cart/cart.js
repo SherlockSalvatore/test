@@ -1,220 +1,135 @@
-const DELIVERY_FEE = 5
+const db = wx.cloud.database()
 
 Page({
   data: {
-    cartItems: [],
-    totalAmount: 0,
-    address: {
-      name: '',
-      phone: '',
-      detail: ''
-    }
-  },
-
-  onLoad() {
-    this.loadCartData()
-    this.loadDefaultAddress()
+    cartList: [],
+    totalPrice: 0,
+    checkAll: true,
+    selectedCount: 0
   },
 
   onShow() {
-    this.loadCartData()
-    this.loadDefaultAddress()
+    this.loadCart()
   },
 
-  loadDefaultAddress() {
-    const defaultAddress = wx.getStorageSync('default_address')
-    if (defaultAddress) {
-      this.setData({
-        address: defaultAddress
-      })
-    }
-  },
-
-  loadCartData() {
-    const app = getApp()
-    const cartMap = app.globalData.cart || {}
-
-    const cartItems = Object.values(cartMap).map(item => ({
-      menuId: item._id,
-      name: item.name,
-      price: item.price,
-      image: item.image,
-      quantity: item.quantity
-    }))
-
-    if (cartItems.length === 0) {
-      this.setData({ cartItems: [], totalAmount: "0.00" })
-      return
-    }
-
-    this.calculateTotal(cartItems)
-  },
-
-  calculateTotal(cartItems) {
-    let subtotal = 0
-    cartItems.forEach(item => {
-      subtotal += item.price * item.quantity
-    })
-    const total = subtotal + DELIVERY_FEE
-
-    this.setData({
-      cartItems,
-      totalAmount: total.toFixed(2)
-    })
-  },
-
-  increase(e) {
-    const id = e.currentTarget.dataset.id
-    const app = getApp()
-    const cartMap = { ...app.globalData.cart }
-
-    if (cartMap[id]) {
-      cartMap[id].quantity += 1
-    }
-
-    app.globalData.cart = cartMap
-    this.loadCartData()
-  },
-
-  decrease(e) {
-    const id = e.currentTarget.dataset.id
-    const app = getApp()
-    const cartMap = { ...app.globalData.cart }
-
-    if (cartMap[id] && cartMap[id].quantity > 0) {
-      cartMap[id].quantity -= 1
-      if (cartMap[id].quantity === 0) {
-        delete cartMap[id]
-      }
-    }
-
-    app.globalData.cart = cartMap
-    this.loadCartData()
-
-    if (Object.keys(cartMap).length === 0) {
-      wx.showToast({ title: '已清空购物车', icon: 'none' })
-    }
-  },
-
-  onNameInput(e) {
-    this.setData({
-      'address.name': e.detail.value
-    })
-  },
-
-  onPhoneInput(e) {
-    this.setData({
-      'address.phone': e.detail.value
-    })
-  },
-
-  onAddressInput(e) {
-    this.setData({
-      'address.detail': e.detail.value
-    })
-  },
-
-  goToOrder() {
-    wx.switchTab({
-      url: '/pages/user/index/index'
-    })
-  },
-
-  submitOrder() {
-    const { cartItems, address, totalAmount } = this.data
-
-    if (!address.name) {
-      wx.showToast({ title: '请输入收货人', icon: 'none' })
-      return
-    }
-    if (!address.phone) {
-      wx.showToast({ title: '请输入联系电话', icon: 'none' })
-      return
-    }
-    if (!address.detail) {
-      wx.showToast({ title: '请输入详细地址', icon: 'none' })
-      return
-    }
-
-    wx.showLoading({ title: '创建订单中...' })
-
-    wx.cloud.callFunction({
-      name: 'order-create',
-      data: {
-        items: cartItems,
-        address,
-        totalAmount: parseFloat(totalAmount),
-        deliveryFee: DELIVERY_FEE
-      }
-    }).then(res => {
+  // 从云端加载购物车
+  async loadCart() {
+    wx.showLoading({ title: '同步中' })
+    try {
+      const res = await db.collection('carts').get()
+      this.setData({ cartList: res.data })
+      this.calculateTotal()
+    } catch (err) {
+      console.error('加载购物车失败', err)
+    } finally {
       wx.hideLoading()
-      const { orderId } = res.result
-      this.requestPayment(orderId)
-    }).catch(err => {
-      wx.hideLoading()
-      wx.showToast({
-        title: '创建订单失败',
-        icon: 'none'
-      })
-      console.error(err)
-    })
+    }
   },
 
-  requestPayment(orderId) {
-    wx.cloud.callFunction({
-      name: 'order-payment',
-      data: { orderId }
-    }).then(res => {
-      // Handle the simulated payment response
-      if (res.result && res.result.mockPayment) {
-        wx.showToast({ title: '体验版模拟支付成功', icon: 'success' })
-        getApp().globalData.cart = {}
+  // 切换选中状态
+  async toggleCheck(e) {
+    const { id, checked } = e.currentTarget.dataset
+    const newStatus = !checked
+    
+    try {
+      await db.collection('carts').doc(id).update({
+        data: { checked: newStatus }
+      })
+      this.loadCart()
+    } catch (err) {
+      console.error('切换选中失败', err)
+    }
+  },
 
-        setTimeout(() => {
-          // Use navigateTo instead of redirectTo to get a "Back" button (Image 3)
-          wx.navigateTo({
-            url: '/pages/user/orders/orders?status=paid'
-          })
-        }, 1500)
-        return
-      }
+  // 全选/反选
+  async toggleCheckAll() {
+    const newStatus = !this.data.checkAll
+    wx.showLoading({ title: '处理中' })
+    
+    try {
+      await wx.cloud.callFunction({
+        name: 'cart-manager',
+        data: { action: 'checkAll', checked: newStatus }
+      })
+      this.loadCart()
+    } catch (err) {
+      console.error('全选操作失败', err)
+    } finally {
+      wx.hideLoading()
+    }
+  },
 
-      // Existing fallback for real payment payload
-      const { timeStamp, nonceStr, pkg, signType, paySign } = res.result || {}
+  // 增加数量
+  async increase(e) {
+    const id = e.currentTarget.dataset.id
+    try {
+      await db.collection('carts').doc(id).update({
+        data: { quantity: db.command.inc(1) }
+      })
+      this.loadCart()
+    } catch (err) {
+      console.error('更新失败', err)
+    }
+  },
 
-      if (!timeStamp) {
-        throw new Error('No mock response and no real pay params returned.')
-      }
-
-      wx.requestPayment({
-        timeStamp,
-        nonceStr,
-        package: pkg,
-        signType,
-        paySign,
-        success: () => {
-          wx.showToast({ title: '支付成功', icon: 'success' })
-          getApp().globalData.cart = {}
-          setTimeout(() => {
-            wx.navigateTo({
-              url: '/pages/user/orders/orders?status=paid'
-            })
-          }, 1500)
-        },
-        fail: (err) => {
-          if (err.errMsg.includes('cancel')) {
-            wx.showToast({ title: '已取消支付', icon: 'none' })
-          } else {
-            wx.showToast({ title: '支付失败', icon: 'none' })
-          }
+  // 减少数量
+  async decrease(e) {
+    const { id, quantity } = e.currentTarget.dataset
+    try {
+      if (quantity > 1) {
+        await db.collection('carts').doc(id).update({
+          data: { quantity: db.command.inc(-1) }
+        })
+      } else {
+        const res = await wx.showModal({
+          title: '提示',
+          content: '确定要从购物车移除吗？'
+        })
+        if (res.confirm) {
+          await db.collection('carts').doc(id).remove()
         }
-      })
-    }).catch(err => {
-      wx.showToast({
-        title: '获取支付参数失败: ' + (err.message || '未知错误'),
-        icon: 'none'
-      })
-      console.error(err)
+      }
+      this.loadCart()
+    } catch (err) {
+      console.error('更新失败', err)
+    }
+  },
+
+  // 计算选中的总价和数量
+  calculateTotal() {
+    let total = 0
+    let count = 0
+    let allChecked = this.data.cartList.length > 0
+
+    this.data.cartList.forEach(item => {
+      if (item.checked) {
+        total += item.price * item.quantity
+        count++
+      } else {
+        allChecked = false
+      }
     })
+
+    this.setData({
+      totalPrice: total.toFixed(2),
+      selectedCount: count,
+      checkAll: allChecked
+    })
+  },
+
+  // 跳转到确认订单详情页 (结算页)
+  goToCheckout() {
+    if (this.data.selectedCount === 0) {
+      wx.showToast({ title: '请先勾选商品', icon: 'none' })
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/user/checkout/checkout'
+    })
+  },
+
+  // 首页挑选
+  goToHome() {
+    wx.switchTab({ url: '/pages/user/index/index' })
   }
 })

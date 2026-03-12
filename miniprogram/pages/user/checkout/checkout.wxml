@@ -1,0 +1,57 @@
+<view class="page">
+  <!-- 1. 地址选择区 (Address) -->
+  <view class="address-card card" bindtap="goToSelectAddress">
+    <view class="address-icon">📍</view>
+    <view wx:if="{{address}}" class="address-info">
+      <view class="addr-top">
+        <text class="name">{{address.name}}</text>
+        <text class="phone">{{address.phone}}</text>
+      </view>
+      <view class="addr-detail">{{address.detail}}</view>
+    </view>
+    <view wx:else class="address-empty">
+      请选择或新增收货地址
+    </view>
+    <view class="arrow-icon">▶</view>
+  </view>
+
+  <!-- 2. 商品预览区 (Order Preview) -->
+  <view class="order-card card">
+    <view class="section-title">订单明细</view>
+    <view class="item-list">
+      <view class="item" wx:for="{{selectedItems}}" wx:key="_id">
+        <image class="item-img" src="{{item.image}}" mode="aspectFill"></image>
+        <view class="item-info">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-spec">数量 x{{item.quantity}}</view>
+        </view>
+        <view class="item-price">¥{{item.price * item.quantity}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 3. 费用明细 (Cost Detail) -->
+  <view class="cost-card card">
+    <view class="cost-item">
+      <text>商品总额</text>
+      <text>¥{{subtotal}}</text>
+    </view>
+    <view class="cost-item">
+      <text>配送费</text>
+      <text>+ ¥{{deliveryFee}}</text>
+    </view>
+    <view class="total-line"></view>
+    <view class="final-price">
+      合计：<text class="price-num">¥{{totalPrice}}</text>
+    </view>
+  </view>
+
+  <!-- 4. 底部提交栏 (Footer) -->
+  <view class="footer">
+    <view class="price-container">
+      <text class="label">应付金额：</text>
+      <text class="price">¥{{totalPrice}}</text>
+    </view>
+    <button class="submit-btn" bindtap="submitOrder">立即下单</button>
+  </view>
+</view>

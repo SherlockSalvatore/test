@@ -4,70 +4,27 @@
     <image class="empty-image" src="/images/header.png" mode="aspectFit"></image>
     <view class="empty-text">宝贝，购物车空空如也哦~</view>
     <button class="go-order-btn" bindtap="goToOrder">去挑选美食</button>
-  </view>
-
-  <view wx:else>
-    <!-- 购物车列表 (Cart List) -->
+  <!-- 购物车列表 (List) -->
+  <view wx:if="{{cartList.length > 0}}" class="cart-container">
     <view class="cart-list">
-      <view
-        wx:for="{{cartItems}}"
-        wx:key="menuId"
-        class="cart-item"
-      >
-        <image class="item-image" src="{{item.image || '/images/placeholder.png'}}" mode="aspectFill"></image>
+      <view class="cart-item card" wx:for="{{cartList}}" wx:key="_id">
+        <view class="check-box" bindtap="toggleCheck" data-id="{{item._id}}" data-checked="{{item.checked}}">
+          <icon type="{{item.checked ? 'success' : 'circle'}}" size="22" color="{{item.checked ? '#22c55e' : '#cbd5e1'}}"></icon>
+        </view>
+        <image class="item-img" src="{{item.image}}" mode="aspectFill"></image>
         <view class="item-info">
           <view class="item-name">{{item.name}}</view>
           <view class="item-bottom">
             <view class="item-price">¥{{item.price}}</view>
-            <view class="item-control">
-              <view class="btn minus" bindtap="decrease" data-id="{{item.menuId}}">-</view>
-              <view class="quantity">{{item.quantity}}</view>
-              <view class="btn plus" bindtap="increase" data-id="{{item.menuId}}">+</view>
+            <view class="quantity-control">
+              <view class="btn minus" bindtap="decrease" data-id="{{item._id}}" data-quantity="{{item.quantity}}">-</view>
+              <view class="num">{{item.quantity}}</view>
+              <view class="btn plus" bindtap="increase" data-id="{{item._id}}">+</view>
             </view>
           </view>
         </view>
       </view>
     </view>
-
-    <!-- 配送信息 (Delivery Info) -->
-    <view class="delivery-section">
-      <view class="section-header">
-        <text class="section-icon">📍</text>
-        <view class="section-title">收货信息</view>
-      </view>
-      
-      <view class="input-group">
-        <input
-          class="input-field"
-          placeholder="收货人姓名 (例：璐璐妈妈)"
-          placeholder-style="color:#9ca3af;"
-          value="{{address.name}}"
-          bindinput="onNameInput"
-        />
-      </view>
-      
-      <view class="input-group">
-        <input
-          class="input-field"
-          placeholder="联系电话"
-          placeholder-style="color:#9ca3af;"
-          value="{{address.phone}}"
-          type="number"
-          bindinput="onPhoneInput"
-        />
-      </view>
-      
-      <view class="input-group">
-        <textarea
-          class="textarea-field"
-          placeholder="详细地址 (如：幸福小区1栋2单元301)"
-          placeholder-style="color:#9ca3af;"
-          value="{{address.detail}}"
-          bindinput="onAddressInput"
-        />
-      </view>
-    </view>
-
     <!-- 结算栏 (Checkout Bar) -->
     <view class="checkout-bar">
       <view class="total-info">

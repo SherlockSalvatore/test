@@ -8,6 +8,7 @@
     "pages/user/orders/orders",
     "pages/user/order/order",
     "pages/user/address/address",
+    "pages/user/checkout/checkout",
     "pages/user/profile/profile",
     "pages/admin/menu/menu",
     "pages/admin/orders/orders",

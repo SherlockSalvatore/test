@@ -57,7 +57,11 @@ page {
   border-radius: 24rpx;
   padding: 24rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 4rpx 15rpx rgba(34, 197, 94, 0.08); /* Mint sweet shadow */
+  padding: 30rpx 20rpx;
+}
+
+.check-box {
+  padding: 0 10rpx;
 }
 
 .item-image {
@@ -241,18 +245,65 @@ page {
   font-weight: bold;
 }
 
+/* 底部结算栏 */
+.cart-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 110rpx;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.05);
+  z-index: 100;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+}
+
+.all-text {
+  font-size: 28rpx;
+  color: #64748b;
+  margin-left: 12rpx;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.total-info {
+  margin-right: 24rpx;
+  text-align: right;
+}
+
+.total-label {
+  font-size: 24rpx;
+  color: #64748b;
+}
+
+.total-price {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ef4444;
+}
+
 .checkout-btn {
-  background: linear-gradient(135deg, #4ade80, #22c55e);
+  background: linear-gradient(135deg, #22c55e, #16a34a);
   color: white;
-  width: 260rpx !important;
-  height: 84rpx;
-  border-radius: 42rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
-  font-weight: bold;
-  box-shadow: 0 6rpx 16rpx rgba(34, 197, 94, 0.3);
+  padding: 0 40rpx;
   margin: 0 !important;
 }
 
